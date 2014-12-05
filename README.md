@@ -1,5 +1,7 @@
-PHP Htaccess Parser
+PHP Htaccess Parser [![Build Status](https://travis-ci.org/tivie/php-htaccess-parser.svg?branch=0.1.3)](https://travis-ci.org/tivie/php-htaccess-parser)
 ===================
+A lightweight PHP htaccess parser
+
 
 ## Introduction
 PHP Htaccess Parser is a small lightweight library that can parse (or tokenize, if you prefer) an apache .htaccess
