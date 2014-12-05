@@ -1,19 +1,19 @@
 PHP Htaccess Parser
 ===================
 
-# Introduction
+## Introduction
 PHP Htaccess Parser is a small lightweight library that can parse (or tokenize, if you prefer) an apache .htaccess
 file. It was developed for personal use to safely read and manipulate .htaccess files.
 
 
-# Instalation
+## Instalation
 You can install it by cloning the git repository, ~~downloading the phar archive~~ (coming soon) or using composer.
 
-## Git clone
+### Git clone
 
     git clone https://github.com/tivie/php-htaccess-parser.git
 
-## Composer
+### Composer
 Add these lines to your composer.json:
 
     {
@@ -27,9 +27,9 @@ or run the following command:
     php composer.phar require tivie/htaccess-parser
 
 
-# Usage
+## Usage
 
-## Basic Usage
+### Basic Usage
 Using PHP Htaccess Parser is very simple.
 
     $file = new \SplFileObject('path/to/.htaccess');
@@ -37,10 +37,10 @@ Using PHP Htaccess Parser is very simple.
     $htaccess = $parser->parse($file);
 
 
-## Options
+### Options
 The parser's behaviour can be changed through the following methods and/or options:
 
-### Setting the file
+#### Setting the file
 The parser uses \SplFileObject to access files. You can set the appropriate file in the constructor, by calling
 `setFile()` or as the first parameter of `$parser->parse`
 
@@ -49,7 +49,7 @@ The parser uses \SplFileObject to access files. You can set the appropriate file
     $parser->parse(new \SplObjectStorage('/path/to/file');
 
 
-### Changing the container
+#### Changing the container
 By default, `$parser->parse()` returns an HtaccessContainer object (which extends ArrayObject) that contains the
 newly tokenized .htaccess file. You can change the returned object by calling `setContainer()`method:
 
@@ -58,7 +58,7 @@ newly tokenized .htaccess file. You can change the returned object by calling `s
 `$myContainer` can be an array or an object that implements `ArrayAccess`.
 
 
-### Use arrays
+#### Use arrays
 The parser can tokenize:
 
  - Directives (example: `Options -MultiViews`)
@@ -81,7 +81,7 @@ prefer, you can instruct the parser to use simple arrays instead by either:
     $parser->parse(null, USE_ARRAYS);
 
 
-### Ignoring White and Comment Lines
+#### Ignoring White and Comment Lines
 You can instruct the parser to ignore WhiteLines, CommentLines or both by:
 
   - calling the respective method
@@ -95,7 +95,7 @@ You can instruct the parser to ignore WhiteLines, CommentLines or both by:
 
     $parser->parse(null, IGNORE_WHITELINES|IGNORE_COMMENTS);
 
-# License
+## License
 PHP Htaccess Parser is released under Apache 2.0 license. For more information, please consult the
 [LICENSE](https://github.com/tivie/php-htaccess-parser/blob/master/LICENSE) file in this repository or
 http://www.apache.org/licenses/LICENSE-2.0.txt.
