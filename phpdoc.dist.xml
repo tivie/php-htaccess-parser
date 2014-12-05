@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdoc>
+    <title><![CDATA[PHP Htaccess Parser]]></title>
+    <parser>
+        <target>docs/structure</target>
+        <encoding>UTF-8</encoding>
+    </parser>
+    <transformer>
+        <target>docs/output</target>
+    </transformer>
+    <transformations>
+        <template name="responsive-twig" />
+    </transformations>
+    <files>
+        <directory>src</directory>
+    </files>
+</phpdoc>

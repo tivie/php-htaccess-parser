@@ -1,0 +1,17 @@
+directive some arguments
+
+
+OldMcDonald "Had a Farm" Ya Ya oh!
+AnotherDirective withJustAnArgument
+
+<IfModule nhecos.c>
+    fooBar bazinga
+</IfModule>
+SoloDirective
+
+
+<files>
+    foo foo
+    bar bar
+    baz bazinga blegh
+</files>

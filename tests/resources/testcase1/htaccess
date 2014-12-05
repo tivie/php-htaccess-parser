@@ -1,0 +1,25 @@
+ # This is a comment line
+directive some arguments
+
+# this is also a comment line \
+that continues on a newline
+
+OldMcDonald "Had a Farm" Ya Ya oh!
+AnotherDirective withJustAnArgument
+
+<IfModule nhecos.c>
+    fooBar bazinga
+    <foo bar>
+        bla bla
+    </foo>
+</IfModule>
+                            # this is a weird comment line
+SoloDirective
+
+#################### and another
+
+<files>
+    foo foo
+    bar bar
+    baz bazinga blegh
+</files>
