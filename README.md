@@ -195,7 +195,7 @@ $newBlock = new Block('modRewrite');
 $htaccess->insertAt(4, $newBlock);
 ```
 
-### Outputting an .htaccess
+### Outputting htaccess
 In order to output an .htaccess txt file, you can simply cast the [**HtaccessContainer**][2] to string and write the resulting string to a file:
 
 ```php
