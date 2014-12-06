@@ -3,6 +3,9 @@ OldMcDonald "Had a Farm" Ya Ya oh!
 AnotherDirective withJustAnArgument
 <IfModule nhecos.c>
     fooBar bazinga
+    <foo bar>
+        bla bla
+    </foo>
 </IfModule>
 SoloDirective
 <files>

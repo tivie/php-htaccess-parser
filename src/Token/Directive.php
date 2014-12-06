@@ -119,10 +119,11 @@ class Directive extends BaseToken
      * Add an argument to the Directive arguments array
      *
      * @param mixed $arg [required] A scalar
+     * @param bool $unique [optional] If this argument is unique
      * @return $this
      * @throws InvalidArgumentException
      */
-    public function addArgument($arg)
+    public function addArgument($arg, $unique = false)
     {
         if (!is_scalar($arg)) {
             throw new InvalidArgumentException('scalar', 0);
@@ -133,9 +134,11 @@ class Directive extends BaseToken
             $arg = "\"$arg\"";
         }
 
-        if (!in_array($arg, $this->arguments)) {
-            $this->arguments[] = $arg;
+        if (in_array($arg, $this->arguments) && $unique) {
+            return $this;
         }
+
+        $this->arguments[] = $arg;
 
         return $this;
     }
@@ -200,5 +203,16 @@ class Directive extends BaseToken
             'name'      => $this->getName(),
             'arguments' => $this->getArguments()
         ];
+    }
+
+    /**
+     * A helper method that returns a string corresponding to the Token's value
+     * (or its arguments concatenated)
+     *
+     * @return string
+     */
+    public function getValue()
+    {
+        return (implode(' ', $this->getArguments()));
     }
 }

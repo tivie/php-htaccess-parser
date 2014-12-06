@@ -20,6 +20,8 @@
 
 namespace Tivie\HtaccessParser\Token;
 
+use Tivie\HtaccessParser\Exception\InvalidArgumentException;
+
 
 /**
  * Class Comment
@@ -72,12 +74,24 @@ class Comment extends BaseToken
     /**
      * Set the Comment Text
      *
-     * @param string $text The comment new text.
+     * @param string $text The comment new text. A # will be prepended automatically if it isn't found at the beginning
+     *                     of the string.
      * @return $this
+     * @throws InvalidArgumentException
      */
     public function setText($text)
     {
-        $this->text = (string)$text;
+        if (!is_string($text)) {
+            throw new InvalidArgumentException('string', 0);
+        }
+
+        $text = trim($text);
+
+        if (strpos($text, '#') !== 0) {
+            $text = '# ' . $text;
+        }
+
+        $this->text = $text;
 
         return $this;
     }
@@ -120,5 +134,39 @@ class Comment extends BaseToken
     public function toArray()
     {
         return array('comment' => $this->text);
+    }
+
+    /**
+     * Get the Token's arguments
+     *
+     * @return array
+     */
+    public function getArguments()
+    {
+        return array($this->getText());
+    }
+
+    /**
+     * Set the Token's arguments
+     *
+     * @param array $arguments
+     * @return $this
+     */
+    public function setArguments(array $arguments)
+    {
+        $this->setText($arguments[0]);
+
+        return $this;
+    }
+
+    /**
+     * A helper method that returns a string corresponding to the Token's value
+     * (or its arguments concatenated)
+     *
+     * @return string
+     */
+    public function getValue()
+    {
+        return $this->getText();
     }
 }

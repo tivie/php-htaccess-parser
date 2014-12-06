@@ -140,6 +140,17 @@ class Block extends BaseToken implements \IteratorAggregate, \ArrayAccess, \Coun
     }
 
     /**
+     * A helper method that returns a string corresponding to the Token's value
+     * (or its arguments concatenated)
+     *
+     * @return string
+     */
+    public function getValue()
+    {
+        return (implode(' ', $this->getArguments()));
+    }
+
+    /**
      * Add an argument to the Block arguments array
      *
      * @param mixed $arg [required] A scalar
@@ -414,5 +425,4 @@ class Block extends BaseToken implements \IteratorAggregate, \ArrayAccess, \Coun
         }
         return $array;
     }
-
 }

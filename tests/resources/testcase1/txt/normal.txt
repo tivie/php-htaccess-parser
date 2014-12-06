@@ -1,4 +1,4 @@
- # This is a comment line
+# This is a comment line
 directive some arguments
 
 # this is also a comment line that continues on a newline
@@ -12,7 +12,7 @@ AnotherDirective withJustAnArgument
         bla bla
     </foo>
 </IfModule>
-                            # this is a weird comment line
+# this is a weird comment line
 SoloDirective
 
 #################### and another

@@ -65,6 +65,6 @@ class CommentTest extends \BaseTestCase
     {
         $text = "This is a comment";
         $this->testClass->setText($text);
-        self::assertEquals($text, $this->testClass->getText());
+        self::assertEquals('# ' .$text, $this->testClass->getText());
     }
 }

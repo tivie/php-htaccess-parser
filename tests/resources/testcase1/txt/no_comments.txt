@@ -6,6 +6,9 @@ AnotherDirective withJustAnArgument
 
 <IfModule nhecos.c>
     fooBar bazinga
+    <foo bar>
+        bla bla
+    </foo>
 </IfModule>
 SoloDirective
 

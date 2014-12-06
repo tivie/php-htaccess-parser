@@ -173,6 +173,19 @@ class Parser
     }
 
     /**
+     * Set the parser mode. (primarily for unit tests, use individual methods instead)
+     *
+     * @param int $mode
+     * @return $this
+     */
+    public function setMode($mode)
+    {
+        $this->mode = $mode;
+
+        return $this;
+    }
+
+    /**
      * Parse a .htaccess file
      *
      * @api
@@ -245,20 +258,26 @@ class Parser
         //Trim line
         $line = trim($line);
 
+        $lineBreaks = array();
+
+        if ($this->isMultiLine($line)) {
+            $line = $this->parseMultiLine($line, $file, $lineBreaks);
+        }
 
         if ($this->isWhiteLine($line)) {
             return (!$ignoreWhiteLines) ? $this->parseWhiteLine() : null;
         }
+
         if ($this->isComment($line)) {
-            return (!$ignoreComments) ? $this->parseCommentLine($line, $file) : null;
+            return (!$ignoreComments) ? $this->parseCommentLine($line, $lineBreaks) : null;
         }
 
         if ($this->isDirective($line)) {
-            return $this->parseDirectiveLine($line, $file);
+            return $this->parseDirectiveLine($line, $file, $lineBreaks);
         }
 
         if ($this->isBlock($line)) {
-            return $this->parseBlockLine($line, $file);
+            return $this->parseBlockLine($line, $file, $lineBreaks);
         }
 
         //throw new SyntaxException($file->key(), $line, "Unexpected line");
@@ -380,17 +399,12 @@ class Parser
      * Parse a Comment Line
      *
      * @param string $line
-     * @param \SplFileObject $file
+     * @param array $lineBreaks
      * @return Comment
      */
-    protected function parseCommentLine($line, \SplFileObject $file)
+    protected function parseCommentLine($line, $lineBreaks)
     {
-        $lineBreaks = array();
         $comment = new Comment();
-
-        if ($this->isMultiLine($line)) {
-            $line = $this->parseMultiLine($line, $file, $lineBreaks);
-        }
         $comment->setText($line)
                 ->setLineBreaks($lineBreaks);
 
@@ -405,14 +419,9 @@ class Parser
      * @return Directive
      * @throws SyntaxException
      */
-    protected function parseDirectiveLine($line, \SplFileObject $file)
+    protected function parseDirectiveLine($line, \SplFileObject $file, $lineBreaks)
     {
-        $lineBreaks = array();
         $directive = new Directive();
-
-        if ($this->isMultiLine($line)) {
-            $line = $this->parseMultiLine($line, $file, $lineBreaks);
-        }
 
         $args = $this->directiveRegex($line);
         $name = array_shift($args);
@@ -437,14 +446,9 @@ class Parser
      * @return Block
      * @throws SyntaxException
      */
-    protected function parseBlockLine($line, \SplFileObject $file)
+    protected function parseBlockLine($line, \SplFileObject $file, $lineBreaks)
     {
-        $lineBreaks = array();
         $block = new Block();
-
-        if ($this->isMultiLine($line)) {
-            $line = $this->parseMultiLine($line, $file, $lineBreaks);
-        }
 
         $args = $this->blockRegex($line);
         $name = array_shift($args);

@@ -81,4 +81,36 @@ class WhiteLine extends BaseToken
     {
         return array('WhiteLine' => '');
     }
+
+    /**
+     * Get the Token's arguments
+     *
+     * @return array
+     */
+    public function getArguments()
+    {
+        return array('');
+    }
+
+    /**
+     * Set the Token's arguments
+     *
+     * @param array $arguments
+     * @return $this
+     */
+    public function setArguments(array $arguments)
+    {
+        return $this;
+    }
+
+    /**
+     * A helper method that returns a string corresponding to the Token's value
+     * (or its arguments concatenated)
+     *
+     * @return string
+     */
+    public function getValue()
+    {
+        return '';
+    }
 }

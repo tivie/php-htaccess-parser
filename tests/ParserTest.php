@@ -170,15 +170,15 @@ class ParserTest extends \BaseTestCase
 
         $line = '<myBlock>';
         $expArray = ['myBlock'];
-        self::assertEquals($expArray, $method->invoke($this->testClass, $line), "Block Regex failed for $line");
+        self::assertSame($expArray, $method->invoke($this->testClass, $line), "Block Regex failed for $line");
 
         $line1 = '<myBlock with args>';
         $expArray1 = ['myBlock', 'with', 'args'];
-        self::assertEquals($expArray1, $method->invoke($this->testClass, $line1), "Block Regex failed for $line1");
+        self::assertSame($expArray1, $method->invoke($this->testClass, $line1), "Block Regex failed for $line1");
 
         $line2 = '<myBlock "with args" several indeed "and quoted">';
         $expArray2 = ['myBlock', '"with args"', 'several', 'indeed', '"and quoted"'];
-        self::assertEquals($expArray2, $method->invoke($this->testClass, $line2), "Block Regex failed for $line2");
+        self::assertSame($expArray2, $method->invoke($this->testClass, $line2), "Block Regex failed for $line2");
     }
 
     /**
@@ -191,30 +191,15 @@ class ParserTest extends \BaseTestCase
 
         $line = 'myDirective';
         $expArray = ['myDirective'];
-        self::assertEquals($expArray, $method->invoke($this->testClass, $line), "Directive Regex failed for line: '$line'");
+        self::assertSame($expArray, $method->invoke($this->testClass, $line), "Directive Regex failed for line: '$line'");
 
         $line1 = 'myDirective with args';
         $expArray1 = ['myDirective', 'with', 'args'];
-        self::assertEquals($expArray1, $method->invoke($this->testClass, $line1), "Directive Regex failed for line: '$line1'");
+        self::assertSame($expArray1, $method->invoke($this->testClass, $line1), "Directive Regex failed for line: '$line1'");
 
         $line2 = 'myDirective "with args" several indeed "and quoted"';
         $expArray2 = ['myDirective', '"with args"', 'several', 'indeed', '"and quoted"'];
-        self::assertEquals($expArray2, $method->invoke($this->testClass, $line2), "Directive Regex failed for line: '$line2'");
-    }
-
-
-    public function testCompareToExample()
-    {
-        $filename = __DIR__ . "/resources/testcase2/htaccess";
-        $file = new \SplFileObject($filename);
-        $parsed = $this->testClass->setFile($file)
-                                  ->ignoreComments(false)
-                                  ->ignoreWhitelines(false)
-                                  ->parse();
-
-
-        self::assertEquals(file_get_contents(__DIR__ . "/resources/testcase2/txt/normal.txt"), $parsed->txtSerialize());
-
+        self::assertSame($expArray2, $method->invoke($this->testClass, $line2), "Directive Regex failed for line: '$line2'");
     }
 
     ///////////////////////////////////////////////////////////////////////////

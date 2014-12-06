@@ -37,6 +37,13 @@ use JsonSerializable;
 interface TokenInterface extends JsonSerializable
 {
     /**
+     * Get the Token's type
+     *
+     * @return int
+     */
+    public function getTokenType();
+
+    /**
      * Get the Token's name
      *
      * @return string
@@ -44,25 +51,27 @@ interface TokenInterface extends JsonSerializable
     public function getName();
 
     /**
-     * Get a string representation of the Token
-     *
-     * @return string
-     */
-    public function __toString();
-
-    /**
-     * Get the array representation of the Token
+     * Get the Token's arguments
      *
      * @return array
      */
-    public function toArray();
+    public function getArguments();
 
     /**
-     * Get the Token's type
+     * Set the Token's arguments
      *
-     * @return int
+     * @param array $arguments
+     * @return $this
      */
-    public function getTokenType();
+    public function setArguments(array $arguments);
+
+    /**
+     * A helper method that returns a string corresponding to the Token's value
+     * (or its arguments concatenated)
+     *
+     * @return string
+     */
+    public function getValue();
 
     /**
      * Check if this Token spawns across multiple lines
@@ -91,4 +100,18 @@ interface TokenInterface extends JsonSerializable
      * @return $this
      */
     public function addLineBreak($lineBreak);
+
+    /**
+     * Get a string representation of the Token
+     *
+     * @return string
+     */
+    public function __toString();
+
+    /**
+     * Get the array representation of the Token
+     *
+     * @return array
+     */
+    public function toArray();
 }
