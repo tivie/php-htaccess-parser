@@ -282,16 +282,16 @@ class Block extends BaseToken implements \IteratorAggregate, \ArrayAccess, \Coun
      * @link http://php.net/manual/en/arrayaccess.offsetset.php
      * @param mixed $offset The offset to assign the argument to.
      * @param mixed $argument The argument to set.
-     * @return void
+     * @throws InvalidArgumentException
      */
     public function offsetSet($offset, $argument)
     {
-        if (!is_scalar($offset)) {
-            throw new \InvalidArgumentException("Offset must be a scalar");
+        if (!is_null($offset) && !is_scalar($offset)) {
+            throw new InvalidArgumentException('scalar', 0);
         }
 
         if (!$argument instanceof TokenInterface) {
-            throw new \InvalidArgumentException("Argument must be of type TokenInterface");
+            throw new InvalidArgumentException('TokenInterface', 1);
         }
 
         if (!in_array($argument, $this->children)) {
