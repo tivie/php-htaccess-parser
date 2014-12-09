@@ -124,26 +124,60 @@ class HtaccessContainer extends BaseArrayObject implements HtaccessInterface
     }
 
     /**
-     * Search this object for a Token with a specific name and returns it.
+     * Search this object for a Token with a specific name and return the first match
      *
-     * @param $name
-     * @param int $type TOKEN_DIRECTIVE | TOKEN_BLOCK
-     * @return null|TokenInterface
+     * @param string $name [required] Name of the token
+     * @param int $type [optional] TOKEN_DIRECTIVE | TOKEN_BLOCK
+     * @param bool $deepSearch [optional] If the search should be multidimensional. Default is true
+     * @return null|TokenInterface Returns the Token or null if none is found
      */
-    public function search($name, $type = null)
+    public function search($name, $type = null, $deepSearch = true)
     {
-        if (($index = $this->getIndex($name, $type)) !== null) {
-            return $this->offsetGet($index);
-        } else {
-            return null;
+        /** @var TokenInterface[] $array */
+        $array = $this->getArrayCopy();
+
+        foreach ($array as $token) {
+            if ($token->getName() === $name) {
+                if ($type === null) {
+                    return $token;
+                }
+                if ($token->getTokenType() === $type) {
+                    return $token;
+                }
+            }
+            if ($token instanceof Block && $token->hasChildren() && $deepSearch) {
+                if ($res = $this->deepSearch($token, $name, $type)) {
+                    return $res;
+                }
+            }
+        }
+        return null;
+    }
+
+    private function deepSearch(Block $parent, $name, $type)
+    {
+        foreach ($parent as $token) {
+            if ($token->getName() === $name) {
+                if ($type === null) {
+                    return $token;
+                }
+                if ($token->getTokenType() === $type) {
+                    return $token;
+                }
+            }
+            if ($token instanceof Block && $token->hasChildren()) {
+                if ($res = $this->deepSearch($token, $name, $type)) {
+                    return $res;
+                }
+            }
         }
     }
 
     /**
-     * Search this object for a Token with specific name and returns its index(key)
+     * Search this object for a Token with specific name and return the index(key) of the first match
      *
-     * @param string $name
-     * @param int $type
+     * @param string $name [required] Name of the token
+     * @param int $type [optional] TOKEN_DIRECTIVE | TOKEN_BLOCK
      * @return int|null Returns the index or null if Token is not found
      */
     public function getIndex($name, $type = null)

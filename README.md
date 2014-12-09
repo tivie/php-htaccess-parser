@@ -148,7 +148,7 @@ By default, prior to serialization, the Parser rewinds the file pointer to the b
 $parser->rewindFile(false);
 ```
 
-### Extending the Parser
+#### Extending the Parser
 The Parser class provides API points that developers can override. For more information, you can check the code at https://github.com/tivie/php-htaccess-parser/blob/master/src/Parser.php
 
 -----
@@ -158,7 +158,7 @@ The Parser class provides API points that developers can override. For more info
 The default returned object ([HtaccessContainer][2]) implements [ArrayAccess](http://php.net/manual/en/class.arrayaccess.php), so you can access the definitions as you would with an array. The keys of this array are numeric and ordered by their appearance in the original file.
 
 
-### Retrieving a Token
+#### Retrieving a Token
 Since the Parser returns an array or array like object, you can retrieve a specific token by it's index:
 
 ```php
@@ -171,7 +171,13 @@ You can also use the `search` method to find a specific token by its name:
 $modRewrite = $htaccess->search('modRewrite');
 ```
 
-### Modifying a Token
+You can constrain the search to a specific token type.
+
+```php
+$modRewrite = $htaccess->search('modRewrite', Tivie\HtaccessParser\Token\TOKEN_BLOCK);
+```
+
+#### Modifying a Token
 [**TokenInterface**][1] provides a common API that you can use to manipulate the tokens.
 
 ```php
@@ -180,7 +186,7 @@ $token->setArguments('foo', 'bar', 'baz'); //Changes the Token arguments
 ```
 Keep in mind, however, that with some tokens, an array of arguments doesn't make much sense. For instance, [**Comments Tokens**][5] only expect 1 argument (the actual text of the comment) while [**WhiteLine Tokens**][4] expect none so extra arguments will be **silently ignored**.
 
-### Adding a Token
+#### Adding a Token
 You can add a token by simply creating and appending it.
 
 ```php
@@ -195,15 +201,15 @@ $newBlock = new Block('modRewrite');
 $htaccess->insertAt(4, $newBlock);
 ```
 
-### Outputting htaccess
-In order to output an .htaccess txt file, you can simply cast the [**HtaccessContainer**][2] to string and write the resulting string to a file:
+#### Outputting htaccess
+In order to output an .htaccess txt file, you can cast the [**HtaccessContainer**][2] to string and write the resulting string to a file:
 
 ```php
 $output = (string) $htaccess;
 file_put_content('.htaccess', $output);
 ```
 
-You can also use the method `txtSerialize` to control how the output should be:
+You can also use the method `txtSerialize` to control how the output should be formatted:
 
 ```php
 $output = $htaccess->ignoreWhiteLines(true)
@@ -213,8 +219,6 @@ file_put_content('.htaccess', $output);
 
 NOTE: Keep in mind that ignored elements in the parser won't be available to HtaccessContainer serialize methods.
 
-
-####  
 
 ## Contribute
 Feel free to contribute by forking or making suggestions.

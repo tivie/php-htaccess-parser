@@ -95,6 +95,48 @@ class HtaccessContainerTest extends \BaseTestCase
     }
 
     /**
+     * @covers \Tivie\HtaccessParser\HtaccessContainer::search
+     */
+    public function testSearch()
+    {
+        $this->testClass[] = $this->createTokenMock();
+        $this->testClass[] = $this->createTokenMock();
+
+        $mock = $this->getMockBuilder('\Tivie\HtaccessParser\Token\Block')
+                                  ->setMethods(['getName', 'getTokenType', 'hasChildren'])
+                                  ->getMock();
+
+        $mock->expects($this->any())
+             ->method('getName')
+             ->will($this->returnValue('fooBlock'));
+
+        $mock->expects($this->any())
+             ->method('getTokenType')
+             ->will($this->returnValue(TOKEN_BLOCK));
+
+        $mock->expects($this->any())
+             ->method('hasChildren')
+             ->will($this->returnValue(TRUE));
+
+        $mockChild = $this->getMockBuilder('\Tivie\HtaccessParser\Token\Directive')
+             ->setMethods(['getName', 'getTokenType'])
+             ->getMock();
+
+        $mockChild->expects($this->any())
+             ->method('getName')
+             ->will($this->returnValue('fooDirective'));
+
+        $mock[] = $this->testClass[] = $this->createTokenMock();
+        $mock[] = $this->testClass[] = $this->createTokenMock();
+        $mock[] = $mockChild;
+
+        $this->testClass[] = $mock;
+
+        self::assertSame($mock, $this->testClass->search('fooBlock', TOKEN_BLOCK, true), "Search method failed to return the correct token");
+        self::assertSame($mockChild, $this->testClass->search('fooDirective', null, true), "Search method failed to return the correct token");
+    }
+
+    /**
      * @covers \Tivie\HtaccessParser\HtaccessContainer::slice
      */
     public function testSlice()
