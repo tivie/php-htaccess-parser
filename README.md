@@ -1,5 +1,7 @@
-PHP Htaccess Parser [![Build Status](https://travis-ci.org/tivie/php-htaccess-parser.svg?branch=0.1.3)](https://travis-ci.org/tivie/php-htaccess-parser)
+PHP Htaccess Parser
 ===================
+[![Build Status](https://travis-ci.org/tivie/php-htaccess-parser.svg?branch=develop)](https://travis-ci.org/tivie/php-htaccess-parser) [![Latest Stable Version](https://poser.pugx.org/tivie/htaccess-parser/v/stable.svg)](https://packagist.org/packages/tivie/htaccess-parser) [![License](https://poser.pugx.org/tivie/htaccess-parser/license.svg)](https://packagist.org/packages/tivie/htaccess-parser) [![HHVM Status](http://hhvm.h4cc.de/badge/tivie/htaccess-parser.svg)](http://hhvm.h4cc.de/package/tivie/htaccess-parser)
+
 A lightweight PHP htaccess parser
 
 ## Introduction
