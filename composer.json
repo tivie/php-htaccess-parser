@@ -4,7 +4,7 @@
   "keywords": [".htaccess", "htaccess"],
   "homepage": "http://tivie.github.com/htaccess-parser/",
   "type": "library",
-  "license": "APACHE 2.0",
+  "license": "APACHE-2.0",
   "authors": [
     {
       "name": "Estevão Soares dos Santos",

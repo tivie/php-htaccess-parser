@@ -42,12 +42,6 @@ use Tivie\HtaccessParser\Token\WhiteLine;
 class Parser
 {
     /**
-     * TODO Not implemented yet
-     * @var string
-     */
-    protected $previousAutoDetectLineEndings;
-
-    /**
      * @var \SplFileObject
      */
     protected $file;
@@ -70,11 +64,6 @@ class Parser
     protected $rewind = true;
 
     /**
-     * @var array
-     */
-    private $lineBreaks = array();
-
-    /**
      * Create a new Htaccess Parser object
      *
      * @param \SplFileObject $htaccessFile [optional] The .htaccess file to read.
@@ -82,9 +71,6 @@ class Parser
      */
     public function __construct(\SplFileObject $htaccessFile = null)
     {
-        // necessary to prevent weird issues with silly newline sequences
-        $this->previousAutoDetectLineEndings = ini_set("auto_detect_line_endings", true);
-
         $this->file = $htaccessFile;
     }
 
@@ -253,7 +239,6 @@ class Parser
     {
         $ignoreWhiteLines = (IGNORE_WHITELINES & $this->_cpMode);
         $ignoreComments = (IGNORE_COMMENTS & $this->_cpMode);
-        $asArray = (AS_ARRAY & $this->_cpMode);
 
         //Trim line
         $line = trim($line);
@@ -280,7 +265,7 @@ class Parser
             return $this->parseBlockLine($line, $file, $lineBreaks);
         }
 
-        //throw new SyntaxException($file->key(), $line, "Unexpected line");
+        //We might try to throw new SyntaxException($file->key(), $line, "Unexpected line") in the future
         return null;
     }
 

@@ -53,12 +53,6 @@ class HtaccessContainer extends BaseArrayObject implements HtaccessInterface
     private $ignoreComments = false;
 
     /**
-     * @todo NOT IMPLEMENTED YET
-     * @var int
-     */
-    private $lineLimit = 80;
-
-    /**
      * Create a new HtaccessContainer
      *
      * @param array $array [optional] An array to populate the ArrayObject
@@ -171,6 +165,7 @@ class HtaccessContainer extends BaseArrayObject implements HtaccessInterface
                 }
             }
         }
+        return null;
     }
 
     /**
