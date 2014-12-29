@@ -1,6 +1,6 @@
-PHP Htaccess Parser
+PHP Htaccess Parser [![SensioLabsInsight](https://insight.sensiolabs.com/projects/8bd10e2c-33d5-4800-8d19-e9be2362eeef/small.png)](https://insight.sensiolabs.com/projects/8bd10e2c-33d5-4800-8d19-e9be2362eeef)
 ===================
-[![Build Status](https://travis-ci.org/tivie/php-htaccess-parser.svg)](https://travis-ci.org/tivie/php-htaccess-parser) [![HHVM Status](http://hhvm.h4cc.de/badge/tivie/htaccess-parser.svg)](http://hhvm.h4cc.de/package/tivie/htaccess-parser) [![Latest Stable Version](https://poser.pugx.org/tivie/htaccess-parser/v/stable.svg)](https://packagist.org/packages/tivie/htaccess-parser) [![License](https://poser.pugx.org/tivie/htaccess-parser/license.svg)](https://packagist.org/packages/tivie/htaccess-parser)
+[![Build Status](https://travis-ci.org/tivie/php-htaccess-parser.svg)](https://travis-ci.org/tivie/php-htaccess-parser) [![HHVM Status](http://hhvm.h4cc.de/badge/tivie/htaccess-parser.svg)](http://hhvm.h4cc.de/package/tivie/htaccess-parser) [![Latest Stable Version](https://poser.pugx.org/tivie/htaccess-parser/v/stable.svg)](https://packagist.org/packages/tivie/htaccess-parser) [![License](https://poser.pugx.org/tivie/htaccess-parser/license.svg)](https://packagist.org/packages/tivie/htaccess-parser) [![SensioLabsInsight](https://insight.sensiolabs.com/projects/8bd10e2c-33d5-4800-8d19-e9be2362eeef/mini.png)](https://insight.sensiolabs.com/projects/8bd10e2c-33d5-4800-8d19-e9be2362eeef)
 
 A lightweight PHP htaccess parser
 
