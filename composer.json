@@ -2,7 +2,7 @@
   "name": "tivie/htaccess-parser",
   "description": "A .htaccess parser and validator implemented in PHP",
   "keywords": [".htaccess", "htaccess"],
-  "homepage": "http://tivie.github.com/htaccess-parser/",
+  "homepage": "https://github.com/tivie/php-htaccess-parser",
   "type": "library",
   "license": "Apache-2.0",
   "authors": [
