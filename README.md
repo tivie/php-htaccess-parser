@@ -97,9 +97,9 @@ The parser's behavior can be changed through the following methods and/or option
 The parser uses \SplFileObject to access files. You can set the appropriate file in the constructor, by calling `setFile()` or as the first parameter of `$parser->parse`
 
 ```php
-$parser = new Parser(new \SplObjectStorage('/path/to/file');
-$parser->setFile(new \SplObjectStorage('/path/to/file');
-$parser->parse(new \SplObjectStorage('/path/to/file');
+$parser = new Parser(new \SplObjectStorage('/path/to/file'));
+$parser->setFile(new \SplObjectStorage('/path/to/file'));
+$parser->parse(new \SplObjectStorage('/path/to/file'));
 ```
 
 #### Changing the container
