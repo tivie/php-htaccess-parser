@@ -84,7 +84,7 @@ file_put_content('.htaccess', $htaccess);
 
 ### The Parser
 
-The Parser class](https://github.com/tivie/php-htaccess-parser/blob/master/src/Parser.php) is the main component of the library. Since it's constructor doesn't require any obligatory arguments, initialized a Parser object is very simple:
+The [Parser class](https://github.com/tivie/php-htaccess-parser/blob/master/src/Parser.php) is the main component of the library. Since it's constructor doesn't require any obligatory arguments, initialized a Parser object is very simple:
 
 ```php
 $parser = new \Tivie\HtaccessParser\Parser();
