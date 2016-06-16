@@ -77,7 +77,10 @@ class Block extends BaseToken implements \IteratorAggregate, \ArrayAccess, \Coun
         }
 
         if ($argument !== null) {
-            $this->argument = $argument;
+            if (!is_array($argument)) {
+                $argument = array($argument);
+            }
+            $this->arguments = $argument;
         }
     }
 
