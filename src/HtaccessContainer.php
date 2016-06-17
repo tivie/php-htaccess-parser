@@ -131,7 +131,7 @@ class HtaccessContainer extends BaseArrayObject implements HtaccessInterface
         $array = $this->getArrayCopy();
 
         foreach ($array as $token) {
-            if ($token->getName() === $name) {
+            if (fnmatch($name, $token->getName())) {
                 if ($type === null) {
                     return $token;
                 }
@@ -151,7 +151,7 @@ class HtaccessContainer extends BaseArrayObject implements HtaccessInterface
     private function deepSearch(Block $parent, $name, $type)
     {
         foreach ($parent as $token) {
-            if ($token->getName() === $name) {
+            if (fnmatch($name, $token->getName())) {
                 if ($type === null) {
                     return $token;
                 }
