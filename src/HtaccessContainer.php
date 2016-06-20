@@ -123,47 +123,53 @@ class HtaccessContainer extends BaseArrayObject implements HtaccessInterface
      * @param string $name [required] Name of the token
      * @param int $type [optional] TOKEN_DIRECTIVE | TOKEN_BLOCK
      * @param bool $deepSearch [optional] If the search should be multidimensional. Default is true
-     * @return null|TokenInterface Returns the Token or null if none is found
+     * @return array Returns an array of Tokens
      */
     public function search($name, $type = null, $deepSearch = true)
     {
+        $result = [];
+
         /** @var TokenInterface[] $array */
         $array = $this->getArrayCopy();
 
-        foreach ($array as $token) {
+        foreach ($array as $index => $token) {
             if (fnmatch($name, $token->getName())) {
                 if ($type === null) {
-                    return $token;
+                    $result[$index] = $token;
                 }
-                if ($token->getTokenType() === $type) {
-                    return $token;
+                if ($type === $token->getTokenType()) {
+                    $result[$index] = $token;
                 }
             }
             if ($token instanceof Block && $token->hasChildren() && $deepSearch) {
-                if ($res = $this->deepSearch($token, $name, $type)) {
-                    return $res;
+                if (($res = $this->deepSearch($token, $name, $type)) !== null) {
+                    $result[$index] = $res;
                 }
             }
         }
-        return null;
+        return $result;
     }
 
     private function deepSearch(Block $parent, $name, $type)
     {
-        foreach ($parent as $token) {
+        $result = [];
+        foreach ($parent as $index => $token) {
             if (fnmatch($name, $token->getName())) {
                 if ($type === null) {
-                    return $token;
+                    $result[$index] = $token;
                 }
-                if ($token->getTokenType() === $type) {
-                    return $token;
+                if ($type === $token->getTokenType()) {
+                    $result[$index] = $token;
                 }
             }
             if ($token instanceof Block && $token->hasChildren()) {
-                if ($res = $this->deepSearch($token, $name, $type)) {
-                    return $res;
+                if (($res = $this->deepSearch($token, $name, $type)) !== null) {
+                    $result[$index] = $res;
                 }
             }
+        }
+        if (count($result) > 0) {
+            return $result;
         }
         return null;
     }
