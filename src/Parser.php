@@ -265,8 +265,8 @@ class Parser
             return $this->parseBlockLine($line, $file, $lineBreaks);
         }
 
-        //We might try to throw new SyntaxException($file->key(), $line, "Unexpected line") in the future
-        return null;
+        //Syntax not recognized so we throw SyntaxException
+        throw new SyntaxException($file->key(), $line, "Unexpected line")
     }
 
     /**
