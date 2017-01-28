@@ -266,7 +266,7 @@ class Parser
         }
 
         //Syntax not recognized so we throw SyntaxException
-        throw new SyntaxException($file->key(), $line, "Unexpected line")
+        throw new SyntaxException($file->key(), $line, "Unexpected line");
     }
 
     /**
