@@ -84,7 +84,7 @@ file_put_content('.htaccess', $htaccess);
 
 ### The Parser
 
-The Parser class](https://github.com/tivie/php-htaccess-parser/blob/master/src/Parser.php) is the main component of the library. Since it's constructor doesn't require any obligatory arguments, initialized a Parser object is very simple:
+The [Parser class](https://github.com/tivie/php-htaccess-parser/blob/master/src/Parser.php) is the main component of the library. Since it's constructor doesn't require any mandatory argument, initializing a Parser object is very simple:
 
 ```php
 $parser = new \Tivie\HtaccessParser\Parser();
@@ -97,9 +97,9 @@ The parser's behavior can be changed through the following methods and/or option
 The parser uses \SplFileObject to access files. You can set the appropriate file in the constructor, by calling `setFile()` or as the first parameter of `$parser->parse`
 
 ```php
-$parser = new Parser(new \SplObjectStorage('/path/to/file');
-$parser->setFile(new \SplObjectStorage('/path/to/file');
-$parser->parse(new \SplObjectStorage('/path/to/file');
+$parser = new Parser(new \SplObjectStorage('/path/to/file'));
+$parser->setFile(new \SplObjectStorage('/path/to/file'));
+$parser->parse(new \SplObjectStorage('/path/to/file'));
 ```
 
 #### Changing the container
@@ -161,7 +161,7 @@ The default returned object ([HtaccessContainer][2]) implements [ArrayAccess](ht
 
 
 #### Retrieving a Token
-Since the Parser returns an array or array like object, you can retrieve a specific token by it's index:
+Since the Parser returns an array or an array like object, you can retrieve a specific token by its index:
 
 ```php
 $firstToken = $htaccess[0];
@@ -176,7 +176,7 @@ $modRewrite = $htaccess->search('modRewrite');
 You can constrain the search to a specific token type.
 
 ```php
-$modRewrite = $htaccess->search('modRewrite', Tivie\HtaccessParser\Token\TOKEN_BLOCK);
+$modRewrite = $htaccess->search('modRewrite', \Tivie\HtaccessParser\Token\TOKEN_BLOCK);
 ```
 
 #### Modifying a Token
