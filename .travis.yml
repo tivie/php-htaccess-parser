@@ -3,4 +3,4 @@ php:
   - 5.5
   - 5.4
   - 7.0
-install: composer install --no-dev
+install: composer install
