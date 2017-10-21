@@ -2,5 +2,5 @@ language: php
 php:
   - 5.5
   - 5.4
-  - hhvm
+  - 7.0
 install: composer install --no-dev
