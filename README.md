@@ -7,7 +7,7 @@ A lightweight PHP htaccess parser
 ## Introduction
 PHP Htaccess Parser is a small lightweight library that can parse (or tokenize, if you prefer) an apache .htaccess file. It was developed for personal use to safely read and manipulate .htaccess files.
 
-##Features
+## Features
 The parser supports:
 
  - Directives (example: `Options -MultiViews`)
