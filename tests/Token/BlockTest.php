@@ -7,13 +7,15 @@
 
 namespace Tivie\HtaccessParser\Token;
 
+use Tivie\HtaccessParser\TestCase\BaseTestCase;
+
 /**
  * Class BlockTest
  *
  * @covers \Tivie\HtaccessParser\Token\Block
  * @author Estevão Soares dos Santos
  */
-class BlockTest extends \BaseTestCase
+class BlockTest extends BaseTestCase
 {
     /**
      * @var Block
@@ -53,7 +55,11 @@ class BlockTest extends \BaseTestCase
      */
     public function testJsonSerialize()
     {
-
+        $expectedArray = [
+            'arguments' => [],
+            'children' => [],
+        ];
+        self::assertEquals($expectedArray, $this->testClass->jsonSerialize());
     }
 
     /**
@@ -61,7 +67,8 @@ class BlockTest extends \BaseTestCase
      */
     public function test__toString()
     {
-
+        $expectedString = "<SomeBlock>\n</SomeBlock>";
+        self::assertEquals($expectedString, (string) $this->testClass);
     }
 
     /**

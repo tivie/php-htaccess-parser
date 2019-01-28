@@ -6,7 +6,11 @@
  * Time: 10:59
  */
 
-abstract class BaseTestCase extends \PHPUnit_Framework_TestCase
+namespace Tivie\HtaccessParser\TestCase;
+
+use PHPUnit\Framework\TestCase;
+
+abstract class BaseTestCase extends TestCase
 {
     protected $testClass;
 

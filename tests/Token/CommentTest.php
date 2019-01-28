@@ -7,12 +7,14 @@
 
 namespace Tivie\HtaccessParser\Token;
 
+use Tivie\HtaccessParser\TestCase\BaseTestCase;
+
 /**
  * Class CommentTest
  * @covers \Tivie\HtaccessParser\Token\Comment
  * @author Estevão Soares dos Santos
  */
-class CommentTest extends \BaseTestCase
+class CommentTest extends BaseTestCase
 {
     /**
      * @var Comment
