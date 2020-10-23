@@ -418,6 +418,7 @@ class Block extends BaseToken implements \IteratorAggregate, \ArrayAccess, \Coun
     public function toArray()
     {
         $array = [
+            'type'      => $this->getTokenType(),
             'name'      => $this->getName(),
             'arguments' => $this->getArguments(),
             'children'  => array()
