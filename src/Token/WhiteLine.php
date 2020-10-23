@@ -82,7 +82,7 @@ class WhiteLine extends BaseToken
         return [
             'type'      => $this->getTokenType(),
             'WhiteLine' => ''
-        ]
+        ];
     }
 
     /**

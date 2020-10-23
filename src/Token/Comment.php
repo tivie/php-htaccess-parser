@@ -136,7 +136,7 @@ class Comment extends BaseToken
         return [
             'type'    => $this->getTokenType(),
             'comment' => $this->text
-        ]
+        ];
     }
 
     /**
