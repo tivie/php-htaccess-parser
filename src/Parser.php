@@ -342,7 +342,7 @@ class Parser
         $line = trim($line);
         $pattern = '/^\<\/';
         $pattern .= ($blockName) ? $blockName : '[^\s\>]+';
-        $pattern .= '\>$/';
+        $pattern .= '\>$/i';
         return (preg_match($pattern, $line) > 0);
     }
 
