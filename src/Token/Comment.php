@@ -133,7 +133,10 @@ class Comment extends BaseToken
      */
     public function toArray()
     {
-        return array('comment' => $this->text);
+        return [
+            'type'    => $this->getTokenType(),
+            'comment' => $this->text
+        ];
     }
 
     /**

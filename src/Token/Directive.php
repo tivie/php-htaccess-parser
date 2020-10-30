@@ -200,6 +200,7 @@ class Directive extends BaseToken
     public function toArray()
     {
         return [
+            'type'      => $this->getTokenType(),
             'name'      => $this->getName(),
             'arguments' => $this->getArguments()
         ];

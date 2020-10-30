@@ -79,7 +79,10 @@ class WhiteLine extends BaseToken
      */
     public function toArray()
     {
-        return array('WhiteLine' => '');
+        return [
+            'type'      => $this->getTokenType(),
+            'WhiteLine' => ''
+        ];
     }
 
     /**
