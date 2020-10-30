@@ -7,13 +7,15 @@
 
 namespace Tivie\HtaccessParser;
 
+use Tivie\HtaccessParser\TestCase\BaseTestCase;
+
 /**
  * Class ParserTest
  * @covers \Tivie\HtaccessParser\Parser
  *
  * @author Estevão Soares dos Santos
  */
-class ParserTest extends \BaseTestCase
+class ParserTest extends BaseTestCase
 {
     /**
      * @var Parser

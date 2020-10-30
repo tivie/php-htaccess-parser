@@ -15,12 +15,17 @@
     "php": ">=5.4.0"
   },
   "require-dev": {
-    "phpunit/phpunit": "4.3.*",
+    "phpunit/phpunit": "^4.8 || ^5.7 || ^6.5",
     "phpdocumentor/phpdocumentor": "2.8.1"
   },
   "autoload": {
     "psr-4": {
       "Tivie\\HtaccessParser\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tivie\\HtaccessParser\\": "tests/"
     }
   }
 }

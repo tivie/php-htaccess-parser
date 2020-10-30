@@ -7,13 +7,15 @@
 
 namespace Tivie\HtaccessParser\Token;
 
+use Tivie\HtaccessParser\TestCase\BaseTestCase;
+
 /**
  * Class DirectiveTest
  *
  * @covers \Tivie\HtaccessParser\Token\Directive
  * @author Estevão Soares dos Santos
  */
-class DirectiveTest extends \BaseTestCase
+class DirectiveTest extends BaseTestCase
 {
     /**
      * @var Directive
