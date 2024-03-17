@@ -7,12 +7,12 @@
 
 namespace Tivie\HtaccessParser\Token;
 
-use Tivie\HtaccessParser\TestCase\BaseTestCase;
+use Tivie\HtaccessParser\BaseTestCase;
+use Tivie\HtaccessParser\Exception\DomainException;
 
 /**
  * Class BlockTest
  *
- * @covers \Tivie\HtaccessParser\Token\Block
  * @author Estevão Soares dos Santos
  */
 class BlockTest extends BaseTestCase
@@ -24,15 +24,12 @@ class BlockTest extends BaseTestCase
 
     public $blockName = 'SomeBlock';
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->testClass = new Block($this->blockName);
         parent::setUp();
     }
 
-    /**
-     * @covers \Tivie\HtaccessParser\Token\Block::getName
-     */
     public function testSetGetName()
     {
         self::assertEquals($this->blockName, $this->testClass->getName(), "Failed getting block name");
@@ -42,17 +39,11 @@ class BlockTest extends BaseTestCase
         self::assertEquals($name, $this->getProperty('blockName'), "Failed setting block name");
     }
 
-    /**
-     * @covers \Tivie\HtaccessParser\Token\Block::getTokenType
-     */
     public function testGetTokenType()
     {
         self::assertEquals(TOKEN_BLOCK, $this->testClass->getTokenType());
     }
 
-    /**
-     * @covers \Tivie\HtaccessParser\Token\Block::jsonSerialize
-     */
     public function testJsonSerialize()
     {
         $expectedArray = [
@@ -62,19 +53,12 @@ class BlockTest extends BaseTestCase
         self::assertEquals($expectedArray, $this->testClass->jsonSerialize());
     }
 
-    /**
-     * @covers \Tivie\HtaccessParser\Token\Block::__toString
-     */
     public function test__toString()
     {
-        $expectedString = "<SomeBlock>\n</SomeBlock>";
+        $expectedString = "<SomeBlock>". PHP_EOL ."</SomeBlock>";
         self::assertEquals($expectedString, (string) $this->testClass);
     }
 
-    /**
-     * @covers \Tivie\HtaccessParser\Token\Block::setArguments
-     * @covers \Tivie\HtaccessParser\Token\Block::getArguments
-     */
     public function testSetGetArguments()
     {
         $args = array('foo', 'bar', 'baz');
@@ -82,20 +66,13 @@ class BlockTest extends BaseTestCase
         self::assertEquals($args, $this->testClass->getArguments());
     }
 
-    /**
-     * @expectedException \Tivie\HtaccessParser\Exception\DomainException
-     * @covers \Tivie\HtaccessParser\Token\Block::setArguments
-     */
     public function testSetArgumentsExceptions()
     {
+        $this->expectException(DomainException::class);
         $args = array('foo', new \StdClass());
         $this->testClass->setArguments($args);
     }
 
-    /**
-     * @covers \Tivie\HtaccessParser\Token\Block::addArgument
-     * @covers \Tivie\HtaccessParser\Token\Block::removeArgument
-     */
     public function testAddRemoveArgument()
     {
         $arg = 'foo';
@@ -109,30 +86,21 @@ class BlockTest extends BaseTestCase
         self::assertNotContains($arg, $this->getProperty('arguments'), "Argument was not removed from Block (and it should)");
     }
 
-    /**
-     * @covers \Tivie\HtaccessParser\Token\Block::addChild
-     */
     public function testAddChild()
     {
         $child = $this->getMockBuilder('\Tivie\HtaccessParser\Token\TokenInterface')
-                      ->setMethods(array())
                       ->getMock();
         $this->testClass->addChild($child);
 
         self::assertContains($child, $this->getProperty('children'), "Child token WAS NOT added successfully");
     }
 
-    /**
-     * @covers \Tivie\HtaccessParser\Token\Block::removeChild
-     */
     public function testRemoveChild()
     {
         $child = $this->getMockBuilder('\Tivie\HtaccessParser\Token\TokenInterface')
-            ->setMethods(array())
             ->getMock();
 
         $notChild = $this->getMockBuilder('\Tivie\HtaccessParser\Token\TokenInterface')
-            ->setMethods(array())
             ->getMock();
 
         $this->setProperty('children', array($child));

@@ -3,7 +3,7 @@
  * -- PHP Htaccess Parser --
  * HtaccessInterface.php created at 03-12-2014
  *
- * Copyright 2014 Estevão Soares dos Santos
+ * Copyright 2014-2024 Estevão Soares dos Santos
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,13 +21,19 @@
 
 namespace Tivie\HtaccessParser;
 
+use ArrayAccess;
+use Countable;
+use IteratorAggregate;
+use JsonSerializable;
+use Serializable;
+
 /**
  * Interface HtaccessInterface
  *
  * @package Tivie\HtaccessParser
- * @copyright 2014 Estevão Soares dos Santos
+ * @copyright 2014-2024 Estêvão Soares dos Santos
  */
-interface HtaccessInterface extends \JsonSerializable, \IteratorAggregate, \ArrayAccess, \Serializable, \Countable
+interface HtaccessInterface extends JsonSerializable, IteratorAggregate, ArrayAccess, Serializable, Countable
 {
     /**
      * Returns a representation of the htaccess, ready for inclusion in a file
@@ -35,7 +41,7 @@ interface HtaccessInterface extends \JsonSerializable, \IteratorAggregate, \Arra
      * @api
      * @return string
      */
-    public function txtSerialize();
+    public function txtSerialize(): string;
 
     /**
      * Get a string representation of this ArrayObject
@@ -43,5 +49,5 @@ interface HtaccessInterface extends \JsonSerializable, \IteratorAggregate, \Arra
      * @api
      * @return string
      */
-    public function __toString();
+    public function __toString(): string;
 }

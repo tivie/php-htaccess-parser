@@ -3,7 +3,7 @@
  * -- PHP Htaccess Parser --
  * Directive.php created at 02-12-2014
  *
- * Copyright 2014 Estevão Soares dos Santos
+ * Copyright 2014-2024 Estevão Soares dos Santos
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,31 +28,27 @@ use Tivie\HtaccessParser\Exception\InvalidArgumentException;
  * A Token corresponding to a directive segment of htaccess
  *
  * @package Tivie\HtaccessParser\Token
- * @copyright 2014 Estevão Soares dos Santos
+ * @copyright 2014-2024 Estêvão Soares dos Santos
  */
 class Directive extends BaseToken
 {
     /**
      * @var string
      */
-    private $name;
+    private string $name;
 
     /**
      * @var array
      */
-    private $arguments = array();
+    private array $arguments = array();
 
     /**
      * @param string $name [optional]
      * @param array $arguments [optional]
      * @throws DomainException
-     * @throws InvalidArgumentException
      */
-    public function __construct($name = null, array $arguments = array())
+    public function __construct(string $name = 'directive', array $arguments = array())
     {
-        if ($name !== null && !is_scalar($name)) {
-            throw new InvalidArgumentException('scalar', 0);
-        }
         $this->name = $name;
         foreach ($arguments as $arg) {
             if (!is_scalar($arg)) {
@@ -67,7 +63,7 @@ class Directive extends BaseToken
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -78,7 +74,7 @@ class Directive extends BaseToken
      * @param string $name
      * @return $this
      */
-    public function setName($name)
+    public function setName(string $name): static
     {
         $this->name = $name;
 
@@ -90,7 +86,7 @@ class Directive extends BaseToken
      *
      * @return array
      */
-    public function getArguments()
+    public function getArguments(): array
     {
         return $this->arguments;
     }
@@ -98,13 +94,13 @@ class Directive extends BaseToken
     /**
      * Set the Directive's arguments
      *
-     * @param array $array [required] An array of string arguments
+     * @param array $arguments [required] An array of string arguments
      * @return $this
-     * @throws DomainException
+     * @throws DomainException|InvalidArgumentException
      */
-    public function setArguments(array $array = array())
+    public function setArguments(array $arguments = array()): static
     {
-        foreach ($array as $arg) {
+        foreach ($arguments as $arg) {
             if (!is_scalar($arg)) {
                 $type = gettype($arg);
                 throw new DomainException("Arguments array should be an array of scalar, but found $type");
@@ -123,14 +119,14 @@ class Directive extends BaseToken
      * @return $this
      * @throws InvalidArgumentException
      */
-    public function addArgument($arg, $unique = false)
+    public function addArgument(mixed $arg, bool $unique = false): static
     {
         if (!is_scalar($arg)) {
             throw new InvalidArgumentException('scalar', 0);
         }
 
         // escape arguments with spaces
-        if (strpos($arg, ' ') !== false && (strpos($arg, '"') === false) ) {
+        if (str_contains($arg, ' ') && (!str_contains($arg, '"')) ) {
             $arg = "\"$arg\"";
         }
 
@@ -149,7 +145,7 @@ class Directive extends BaseToken
      * @param string $arg
      * @return $this
      */
-    public function removeArgument($arg)
+    public function removeArgument(string $arg): static
     {
         if (($name = array_search($arg, $this->arguments)) !== false) {
             unset($this->arguments[$name]);
@@ -161,7 +157,7 @@ class Directive extends BaseToken
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         $str = $this->getName();
         foreach ($this->arguments as $arg) {
@@ -174,10 +170,10 @@ class Directive extends BaseToken
      * Specify data which should be serialized to JSON
      *
      * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
-     * @return mixed data which can be serialized by <b>json_encode</b>,
+     * @return array data which can be serialized by <b>json_encode</b>,
      * which is a value of any type other than a resource.
      */
-    function jsonSerialize()
+    function jsonSerialize(): array
     {
         return $this->arguments;
     }
@@ -187,7 +183,7 @@ class Directive extends BaseToken
      *
      * @return int
      */
-    public function getTokenType()
+    public function getTokenType(): int
     {
         return TOKEN_DIRECTIVE;
     }
@@ -197,7 +193,7 @@ class Directive extends BaseToken
      *
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'type'      => $this->getTokenType(),
@@ -212,7 +208,7 @@ class Directive extends BaseToken
      *
      * @return string
      */
-    public function getValue()
+    public function getValue(): string
     {
         return (implode(' ', $this->getArguments()));
     }

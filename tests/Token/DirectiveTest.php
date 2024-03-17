@@ -7,12 +7,11 @@
 
 namespace Tivie\HtaccessParser\Token;
 
-use Tivie\HtaccessParser\TestCase\BaseTestCase;
+use Tivie\HtaccessParser\BaseTestCase;
 
 /**
  * Class DirectiveTest
  *
- * @covers \Tivie\HtaccessParser\Token\Directive
  * @author Estevão Soares dos Santos
  */
 class DirectiveTest extends BaseTestCase
@@ -27,23 +26,17 @@ class DirectiveTest extends BaseTestCase
      */
     public $key = 'myDirective';
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->testClass = new Directive($this->key);
         parent::setUp();
     }
 
-    /**
-     * @covers \Tivie\HtaccessParser\Token\Directive::getName
-     */
     public function testGetName()
     {
         self::assertEquals($this->key, $this->testClass->getName());
     }
 
-    /**
-     * @covers \Tivie\HtaccessParser\Token\Directive::setName
-     */
     public function testSetName()
     {
         $newKey = "myNewDIrective";
@@ -52,17 +45,11 @@ class DirectiveTest extends BaseTestCase
         self::assertEquals($newKey, $this->testClass->getName());
     }
 
-    /**
-     * @covers \Tivie\HtaccessParser\Token\Directive::getTokenType
-     */
     public function testGetTokenType()
     {
         self::assertEquals(TOKEN_DIRECTIVE, $this->testClass->getTokenType());
     }
 
-    /**
-     * @covers \Tivie\HtaccessParser\Token\Directive::jsonSerialize
-     */
     public function testJsonSerialize()
     {
         $args = ['foo', 'bar', 'baz'];
@@ -73,9 +60,6 @@ class DirectiveTest extends BaseTestCase
 
     }
 
-    /**
-     * @covers \Tivie\HtaccessParser\Token\Directive::__toString
-     */
     public function test__toString()
     {
         $args = ['foo', 'bar', 'baz'];
@@ -85,10 +69,6 @@ class DirectiveTest extends BaseTestCase
         self::assertEquals($expectedOtp, (string) $this->testClass, "Casting Directive to string does not produce the expected value");
     }
 
-    /**
-     * @covers \Tivie\HtaccessParser\Token\Directive::setArguments
-     * @covers \Tivie\HtaccessParser\Token\Directive::getArguments
-     */
     public function testSetGetArguments()
     {
         $args = array('foo', 'bar', 'baz');
@@ -96,19 +76,13 @@ class DirectiveTest extends BaseTestCase
         self::assertEquals($args, $this->testClass->getArguments());
     }
 
-    /**
-     * @expectedException \Tivie\HtaccessParser\Exception\DomainException
-     */
     public function testSetArgumentsExceptions()
     {
+        $this->expectException(\Tivie\HtaccessParser\Exception\DomainException::class);
         $args = array('foo', new \StdClass());
         $this->testClass->setArguments($args);
     }
 
-    /**
-     * @covers \Tivie\HtaccessParser\Token\Directive::addArgument
-     * @covers \Tivie\HtaccessParser\Token\Directive::removeArgument
-     */
     public function testAddRemoveArgument()
     {
         $arg = 'foo';

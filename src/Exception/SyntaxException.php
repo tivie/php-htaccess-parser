@@ -3,7 +3,7 @@
  * -- PHP Htaccess Parser --
  * SyntaxException.php created at 02-12-2014
  *
- * Copyright 2014 Estevão Soares dos Santos
+ * Copyright 2014-2024 Estevão Soares dos Santos
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ namespace Tivie\HtaccessParser\Exception;
  * An exception thrown if there's a syntax error in .htaccess
  *
  * @package Tivie\HtaccessParser\Exception
- * @copyright 2014 Estevão Soares dos Santos
+ * @copyright 2014-2024 Estêvão Soares dos Santos
  */
 class SyntaxException extends Exception
 {

@@ -6,25 +6,27 @@
  * Time: 10:59
  */
 
-namespace Tivie\HtaccessParser\TestCase;
+namespace Tivie\HtaccessParser;
 
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use ReflectionMethod;
 
 abstract class BaseTestCase extends TestCase
 {
     protected $testClass;
 
     /**
-     * @var \ReflectionClass
+     * @var ReflectionClass
      */
-    protected $reflection;
+    protected ReflectionClass $reflection;
 
-    public function setUp()
+    public function setUp(): void
     {
-        $this->reflection = new \ReflectionClass($this->testClass);
+        $this->reflection = new ReflectionClass($this->testClass);
     }
 
-    public function getMethod($method)
+    public function getMethod($method): ReflectionMethod
     {
         $method = $this->reflection->getMethod($method);
         $method->setAccessible(true);
@@ -40,7 +42,7 @@ abstract class BaseTestCase extends TestCase
         return $property->getValue($this->testClass);
     }
 
-    public function setProperty($property, $value)
+    public function setProperty($property, $value): void
     {
         $property = $this->reflection->getProperty($property);
         $property->setAccessible(true);

@@ -3,7 +3,7 @@
  * -- PHP Htaccess Parser --
  * Comment.php created at 02-12-2014
  *
- * Copyright 2014 Estevão Soares dos Santos
+ * Copyright 2014-2024 Estevão Soares dos Santos
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,22 +20,20 @@
 
 namespace Tivie\HtaccessParser\Token;
 
-use Tivie\HtaccessParser\Exception\InvalidArgumentException;
-
 
 /**
  * Class Comment
  * A Token corresponding to a comment segment of .htaccess
  *
  * @package Tivie\HtaccessParser\Token
- * @copyright 2014 Estevão Soares dos Santos
+ * @copyright 2014-2024 Estêvão Soares dos Santos
  */
 class Comment extends BaseToken
 {
     /**
      * @var string
      */
-    private $text = '';
+    private string $text;
 
     /**
      * Create a new Comment token.
@@ -45,9 +43,9 @@ class Comment extends BaseToken
      *
      * @param string $text The comment text
      */
-    public function __construct($text = '')
+    public function __construct(string $text = '')
     {
-        $this->text = (string)$text;
+        $this->text = $text;
     }
 
     /**
@@ -56,7 +54,7 @@ class Comment extends BaseToken
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return '#comment';
     }
@@ -66,7 +64,7 @@ class Comment extends BaseToken
      *
      * @return string
      */
-    public function getText()
+    public function getText(): string
     {
         return $this->text;
     }
@@ -77,17 +75,12 @@ class Comment extends BaseToken
      * @param string $text The comment new text. A # will be prepended automatically if it isn't found at the beginning
      *                     of the string.
      * @return $this
-     * @throws InvalidArgumentException
      */
-    public function setText($text)
+    public function setText(string $text): static
     {
-        if (!is_string($text)) {
-            throw new InvalidArgumentException('string', 0);
-        }
-
         $text = trim($text);
 
-        if (strpos($text, '#') !== 0) {
+        if (!str_starts_with($text, '#')) {
             $text = '# ' . $text;
         }
 
@@ -100,10 +93,10 @@ class Comment extends BaseToken
      * Specify data which should be serialized to JSON
      *
      * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
-     * @return mixed data which can be serialized by <b>json_encode</b>,
+     * @return string data which can be serialized by <b>json_encode</b>,
      * which is a value of any type other than a resource.
      */
-    function jsonSerialize()
+    function jsonSerialize(): string
     {
         return $this->__toString();
     }
@@ -111,7 +104,7 @@ class Comment extends BaseToken
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->text;
     }
@@ -121,7 +114,7 @@ class Comment extends BaseToken
      *
      * @return int
      */
-    public function getTokenType()
+    public function getTokenType(): int
     {
         return TOKEN_COMMENT;
     }
@@ -131,7 +124,7 @@ class Comment extends BaseToken
      *
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'type'    => $this->getTokenType(),
@@ -144,7 +137,7 @@ class Comment extends BaseToken
      *
      * @return array
      */
-    public function getArguments()
+    public function getArguments(): array
     {
         return array($this->getText());
     }
@@ -155,7 +148,7 @@ class Comment extends BaseToken
      * @param array $arguments
      * @return $this
      */
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): static
     {
         $this->setText($arguments[0]);
 
@@ -168,7 +161,7 @@ class Comment extends BaseToken
      *
      * @return string
      */
-    public function getValue()
+    public function getValue(): string
     {
         return $this->getText();
     }

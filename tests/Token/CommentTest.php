@@ -7,11 +7,10 @@
 
 namespace Tivie\HtaccessParser\Token;
 
-use Tivie\HtaccessParser\TestCase\BaseTestCase;
+use Tivie\HtaccessParser\BaseTestCase;
 
 /**
  * Class CommentTest
- * @covers \Tivie\HtaccessParser\Token\Comment
  * @author Estevão Soares dos Santos
  */
 class CommentTest extends BaseTestCase
@@ -21,33 +20,23 @@ class CommentTest extends BaseTestCase
      */
     public $testClass;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->testClass = new Comment();
         parent::setUp();
     }
 
-    /**
-     * @covers \Tivie\HtaccessParser\Token\Comment::getName
-     */
     public function testGetName()
     {
         $name = '#comment';
         self::assertEquals($name, $this->testClass->getName());
     }
 
-    /**
-     * @covers \Tivie\HtaccessParser\Token\Comment::getTokenType
-     */
     public function testGetTokenType()
     {
         self::assertEquals(TOKEN_COMMENT, $this->testClass->getTokenType());
     }
 
-    /**
-     * @covers \Tivie\HtaccessParser\Token\Comment::jsonSerialize
-     * @covers \Tivie\HtaccessParser\Token\Comment::__toString
-     */
     public function testJsonSerializeAnToString()
     {
         $text = "This is a comment";
@@ -59,10 +48,6 @@ class CommentTest extends BaseTestCase
 
     }
 
-    /**
-     * @covers \Tivie\HtaccessParser\Token\Comment::setText
-     * @covers \Tivie\HtaccessParser\Token\Comment::getText
-     */
     public function testSetGetText()
     {
         $text = "This is a comment";

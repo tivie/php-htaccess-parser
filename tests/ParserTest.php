@@ -7,11 +7,8 @@
 
 namespace Tivie\HtaccessParser;
 
-use Tivie\HtaccessParser\TestCase\BaseTestCase;
-
 /**
  * Class ParserTest
- * @covers \Tivie\HtaccessParser\Parser
  *
  * @author Estevão Soares dos Santos
  */
@@ -22,7 +19,7 @@ class ParserTest extends BaseTestCase
      */
     protected $testClass;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->testClass = new Parser();
         parent::setUp();
@@ -32,9 +29,6 @@ class ParserTest extends BaseTestCase
     // Check Methods Tests
     //
 
-    /**
-     * @covers \Tivie\HtaccessParser\Parser::isWhiteLine
-     */
     public function testIsWhiteLine()
     {
         $name = 'isWhiteLine';
@@ -51,9 +45,6 @@ class ParserTest extends BaseTestCase
         $this->regexTesterMaker('FALSE', $name, "\r\n   something \r\n   ");
     }
 
-    /**
-     * @covers \Tivie\HtaccessParser\Parser::isMultiLine
-     */
     public function testIsMultiLine()
     {
         $name = 'isMultiLine';
@@ -64,9 +55,6 @@ class ParserTest extends BaseTestCase
         $this->regexTesterMaker('TRUE',  $name, '     \\');
     }
 
-    /**
-     * @covers \Tivie\HtaccessParser\Parser::isComment
-     */
     public function testIsComment()
     {
         $name = 'isComment';
@@ -77,9 +65,7 @@ class ParserTest extends BaseTestCase
         $this->regexTesterMaker('FALSE', $name, 'not # a comment');
         $this->regexTesterMaker('TRUE', $name, '# comment');
     }
-    /**
-     * @covers \Tivie\HtaccessParser\Parser::isDirective
-     */
+
     public function testIsDirective()
     {
         $name = 'isDirective';
@@ -93,9 +79,6 @@ class ParserTest extends BaseTestCase
         $this->regexTesterMaker('TRUE',  $name, 'someDirective with #symbol');
     }
 
-    /**
-     * @covers \Tivie\HtaccessParser\Parser::isBlock
-     */
     public function testIsBlock()
     {
         $name = 'isBlock';
@@ -115,9 +98,6 @@ class ParserTest extends BaseTestCase
         $this->regexTesterMaker('TRUE',  $name, '<someBlock with args>');
     }
 
-    /**
-     * @covers \Tivie\HtaccessParser\Parser::isBlockEnd
-     */
     public function testIsBlockEnd()
     {
         $name = 'isBlockEnd';
@@ -136,9 +116,6 @@ class ParserTest extends BaseTestCase
         $this->regexTesterMaker('TRUE',  $name, '</someBlock>');
     }
 
-    /**
-     * @covers \Tivie\HtaccessParser\Parser::isBlockEnd
-     */
     public function testIsBlockEndWithBlockNameParam()
     {
         $name = 'isBlockEnd';
@@ -161,10 +138,6 @@ class ParserTest extends BaseTestCase
     ///////////////////////////////////////////////////////////////////////////
     // Parse Methods Tests
     //
-
-    /**
-     * @covers \Tivie\HtaccessParser\Parser::blockRegex
-     */
     public function testBlockRegex()
     {
         $name = 'blockRegex';
@@ -183,9 +156,6 @@ class ParserTest extends BaseTestCase
         self::assertSame($expArray2, $method->invoke($this->testClass, $line2), "Block Regex failed for $line2");
     }
 
-    /**
-     * @covers \Tivie\HtaccessParser\Parser::directiveRegex
-     */
     public function testDirectiveRegex()
     {
         $name = 'directiveRegex';
@@ -207,14 +177,7 @@ class ParserTest extends BaseTestCase
     ///////////////////////////////////////////////////////////////////////////
     // Helper Methods
     //
-    /**
-     * @coversNothing
-     * @param string $expectedBool
-     * @param string $name
-     * @param string $line
-     * @param array $args
-     */
-    private function regexTesterMaker($expectedBool, $name, $line, array $args = array())
+    private function regexTesterMaker($expectedBool, $name, $line, array $args = array()): void
     {
         $bool = strtoupper($expectedBool);
         $method = $this->getMethod($name);

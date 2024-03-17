@@ -20,7 +20,7 @@
 
 namespace Tivie\HtaccessParser;
 
-use Tivie\HtaccessParser\TestCase\BaseTestCase;
+use SplFileObject;
 
 class LibraryCompositeTest extends BaseTestCase
 {
@@ -39,7 +39,7 @@ class LibraryCompositeTest extends BaseTestCase
      */
     public $numberOfTests = 2;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->testClass = new Parser();
         $max = $this->numberOfTests;
@@ -60,14 +60,6 @@ class LibraryCompositeTest extends BaseTestCase
         parent::setUp();
     }
 
-    /**
-     * @covers \Tivie\HtaccessParser\Parser::setFile
-     * @covers \Tivie\HtaccessParser\Parser::ignoreComments
-     * @covers \Tivie\HtaccessParser\Parser::ignoreWhitelines
-     * @covers \Tivie\HtaccessParser\Parser::parse
-     * @covers \Tivie\HtaccessParser\HtaccessContainer::txtSerialize
-     * @covers \Tivie\HtaccessParser\HtaccessContainer::__toString
-     */
     public function testCompareToExample()
     {
         for ($i=0; $i < $this->numberOfTests; ++$i) {
@@ -76,15 +68,17 @@ class LibraryCompositeTest extends BaseTestCase
 
             /**
              * @var $type int
-             * @var $file \SplFileObject
+             * @var $file SplFileObject
              */
             foreach ($this->testCase[$i]['txt'] as $type => $filename) {
                 $parsed = $this->testClass->setMode($type)->parse();
-                self::assertSame(file_get_contents($filename), $parsed->txtSerialize(), "Failed test (PARSE MODIFIED) with $filename");
+                $txtfilecontents = file_get_contents($filename);
+                $txtfilecontents = preg_replace("~\R~u", PHP_EOL, $txtfilecontents);
+                self::assertSame($txtfilecontents, $parsed->txtSerialize(), "Failed test (PARSE MODIFIED) with $filename");
 
                 $parsed = $this->testClass->setMode(0)->parse();
                 self::assertSame(
-                    file_get_contents($filename),
+                    $txtfilecontents,
                     $parsed->txtSerialize(
                         4,
                         (IGNORE_WHITELINES & $type),

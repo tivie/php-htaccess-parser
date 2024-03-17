@@ -3,7 +3,7 @@
  * -- PHP Htaccess Parser --
  * BaseToken.php created at 03-12-2014
  *
- * Copyright 2014 Estevão Soares dos Santos
+ * Copyright 2014-2024 Estêvão Soares dos Santos
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,19 +29,19 @@ use Tivie\HtaccessParser\Exception\InvalidArgumentException;
  * An abstract class for Tokens to extend
  *
  * @package Tivie\HtaccessParser\Token
- * @copyright 2014 Estevão Soares dos Santos
+ * @copyright 2014-2024 Estêvão Soares dos Santos
  */
 abstract class BaseToken implements TokenInterface
 {
 
-    protected $lineBreaks = array();
+    protected array $lineBreaks = array();
 
     /**
      * Check if this Token spawns across multiple lines
      *
      * @return bool
      */
-    public function isMultiLine()
+    public function isMultiLine(): bool
     {
         return (!empty($this->lineBreaks));
     }
@@ -51,7 +51,7 @@ abstract class BaseToken implements TokenInterface
      *
      * @return int[]
      */
-    public function getLineBreaks()
+    public function getLineBreaks(): array
     {
         return $this->lineBreaks;
     }
@@ -63,7 +63,7 @@ abstract class BaseToken implements TokenInterface
      * @throws DomainException
      * @return $this
      */
-    public function setLineBreaks(array $lineBreaks)
+    public function setLineBreaks(array $lineBreaks): static
     {
         foreach ($lineBreaks as $lb) {
             if (!is_int($lb)) {
@@ -80,16 +80,10 @@ abstract class BaseToken implements TokenInterface
      *
      * @param int $lineBreak
      * @return $this
-     * @throws InvalidArgumentException
      */
-    public function addLineBreak($lineBreak)
+    public function addLineBreak(int $lineBreak): static
     {
-        if (!is_int($lineBreak)) {
-            throw new InvalidArgumentException('integer', 0);
-        }
-
         $this->lineBreaks[] = $lineBreak;
-
         return $this;
     }
 }

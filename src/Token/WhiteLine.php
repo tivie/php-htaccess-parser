@@ -3,7 +3,7 @@
  * -- PHP Htaccess Parser --
  * WhiteLine.php created at 02-12-2014
  *
- * Copyright 2014 Estevão Soares dos Santos
+ * Copyright 2014-2024 Estevão Soares dos Santos
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ namespace Tivie\HtaccessParser\Token;
  * A Token corresponding to a white line (blank line) segment of .htaccess
  *
  * @package Tivie\HtaccessParser\Token
- * @copyright 2014 Estevão Soares dos Santos
+ * @copyright 2014-2024 Estêvão Soares dos Santos
  */
 class WhiteLine extends BaseToken
 {
@@ -35,7 +35,7 @@ class WhiteLine extends BaseToken
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return 'WhiteLine';
     }
@@ -45,7 +45,7 @@ class WhiteLine extends BaseToken
      *
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return '';
     }
@@ -55,7 +55,7 @@ class WhiteLine extends BaseToken
      *
      * @return int
      */
-    public function getTokenType()
+    public function getTokenType(): int
     {
         return TOKEN_WHITELINE;
     }
@@ -64,10 +64,10 @@ class WhiteLine extends BaseToken
      * Specify data which should be serialized to JSON
      *
      * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
-     * @return mixed data which can be serialized by <b>json_encode</b>,
+     * @return string data which can be serialized by <b>json_encode</b>,
      * which is a value of any type other than a resource.
      */
-    function jsonSerialize()
+    function jsonSerialize(): string
     {
         return '';
     }
@@ -77,7 +77,7 @@ class WhiteLine extends BaseToken
      *
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'type'      => $this->getTokenType(),
@@ -90,7 +90,7 @@ class WhiteLine extends BaseToken
      *
      * @return array
      */
-    public function getArguments()
+    public function getArguments(): array
     {
         return array('');
     }
@@ -101,7 +101,7 @@ class WhiteLine extends BaseToken
      * @param array $arguments
      * @return $this
      */
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): static
     {
         return $this;
     }
@@ -112,7 +112,7 @@ class WhiteLine extends BaseToken
      *
      * @return string
      */
-    public function getValue()
+    public function getValue(): string
     {
         return '';
     }

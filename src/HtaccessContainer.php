@@ -3,7 +3,7 @@
  * -- PHP Htaccess Parser --
  * HtaccessContainer.php created at 03-12-2014
  *
- * Copyright 2014 Estevão Soares dos Santos
+ * Copyright 2014-2024 Estevão Soares dos Santos
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
 
 namespace Tivie\HtaccessParser;
 
+use ArrayAccess;
 use ArrayObject as BaseArrayObject;
 use Tivie\HtaccessParser\Exception\InvalidArgumentException;
 use Tivie\HtaccessParser\Token\Block;
@@ -32,7 +33,7 @@ use Tivie\HtaccessParser\Token\WhiteLine;
  * A generic ArrayObject that can be used to store a parsed htaccess. Implements JsonSerializable
  *
  * @package Tivie\HtaccessParser
- * @copyright 2014 Estevão Soares dos Santos
+ * @copyright 2014-2024 Estêvão Soares dos Santos
  */
 class HtaccessContainer extends BaseArrayObject implements HtaccessInterface
 {
@@ -40,17 +41,17 @@ class HtaccessContainer extends BaseArrayObject implements HtaccessInterface
     /**
      * @var int
      */
-    private $indentation = 4;
+    private int $indentation = 4;
 
     /**
      * @var bool
      */
-    private $ignoreWhiteLines = false;
+    private bool $ignoreWhiteLines = false;
 
     /**
      * @var bool
      */
-    private $ignoreComments = false;
+    private bool $ignoreComments = false;
 
     /**
      * Create a new HtaccessContainer
@@ -66,25 +67,19 @@ class HtaccessContainer extends BaseArrayObject implements HtaccessInterface
      * Set the indentation level
      *
      * @api
-     * @param integer $spaces [required] The number of spaces to indent lines
+     * @param int $spaces [required] The number of spaces to indent lines
      * @return $this
-     * @throws InvalidArgumentException
      */
-    public function setIdentation($spaces)
+    public function setIdentation(int $spaces): static
     {
-        if (!is_int($spaces)) {
-            throw new InvalidArgumentException('integer', 0);
-        }
-
         $this->indentation = $spaces;
-
         return $this;
     }
 
     /**
      * @return boolean
      */
-    public function isIgnoreComments()
+    public function isIgnoreComments(): bool
     {
         return $this->ignoreComments;
     }
@@ -93,7 +88,7 @@ class HtaccessContainer extends BaseArrayObject implements HtaccessInterface
      * @param boolean $ignoreComments
      * @return $this
      */
-    public function setIgnoreComments($ignoreComments)
+    public function setIgnoreComments(bool $ignoreComments): static
     {
         $this->ignoreComments = $ignoreComments;
         return $this;
@@ -102,7 +97,7 @@ class HtaccessContainer extends BaseArrayObject implements HtaccessInterface
     /**
      * @return boolean
      */
-    public function isIgnoreWhiteLines()
+    public function isIgnoreWhiteLines(): bool
     {
         return $this->ignoreWhiteLines;
     }
@@ -111,7 +106,7 @@ class HtaccessContainer extends BaseArrayObject implements HtaccessInterface
      * @param boolean $ignoreWhiteLines
      * @return $this
      */
-    public function setIgnoreWhiteLines($ignoreWhiteLines)
+    public function setIgnoreWhiteLines(bool $ignoreWhiteLines): static
     {
         $this->ignoreWhiteLines = $ignoreWhiteLines;
         return $this;
@@ -121,11 +116,11 @@ class HtaccessContainer extends BaseArrayObject implements HtaccessInterface
      * Search this object for a Token with a specific name and return the first match
      *
      * @param string $name [required] Name of the token
-     * @param int $type [optional] TOKEN_DIRECTIVE | TOKEN_BLOCK
+     * @param int|null $type [optional] TOKEN_DIRECTIVE | TOKEN_BLOCK
      * @param bool $deepSearch [optional] If the search should be multidimensional. Default is true
      * @return null|TokenInterface Returns the Token or null if none is found
      */
-    public function search($name, $type = null, $deepSearch = true)
+    public function search(string $name, int $type = null, bool $deepSearch = true): ?TokenInterface
     {
         /** @var TokenInterface[] $array */
         $array = $this->getArrayCopy();
@@ -148,8 +143,15 @@ class HtaccessContainer extends BaseArrayObject implements HtaccessInterface
         return null;
     }
 
-    private function deepSearch(Block $parent, $name, $type)
+    /**
+     * @param Block $parent
+     * @param string $name
+     * @param int|null $type
+     * @return TokenInterface|null
+     */
+    private function deepSearch(Block $parent, string $name, int|null $type): ?TokenInterface
     {
+        /** @var TokenInterface[] $parent */
         foreach ($parent as $token) {
             if (fnmatch($name, $token->getName())) {
                 if ($type === null) {
@@ -172,10 +174,10 @@ class HtaccessContainer extends BaseArrayObject implements HtaccessInterface
      * Search this object for a Token with specific name and return the index(key) of the first match
      *
      * @param string $name [required] Name of the token
-     * @param int $type [optional] TOKEN_DIRECTIVE | TOKEN_BLOCK
+     * @param int|null $type [optional] TOKEN_DIRECTIVE | TOKEN_BLOCK
      * @return int|null Returns the index or null if Token is not found
      */
-    public function getIndex($name, $type = null)
+    public function getIndex(string $name, int $type = null): ?int
     {
         /** @var TokenInterface[] $array */
         $array = $this->getArrayCopy();
@@ -197,14 +199,14 @@ class HtaccessContainer extends BaseArrayObject implements HtaccessInterface
      * Get a representation ready to be encoded with json_encoded.
      * Note: Whitelines and Comments are ignored and will not be included in the serialization
      *
-     * @api
-     * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
-     * @return mixed data which can be serialized by <b>json_encode</b>,
+     * @return array data which can be serialized by <b>json_encode</b>,
      * which is a value of any type other than a resource.
+     *@link http://php.net/manual/en/jsonserializable.jsonserialize.php
+     * @api
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
-        /** @var \Tivie\HtaccessParser\Token\TokenInterface[] $array */
+        /** @var TokenInterface[] $array */
         $array = $this->getArrayCopy();
         $otp = array();
         foreach ($array as $arr) {
@@ -219,15 +221,15 @@ class HtaccessContainer extends BaseArrayObject implements HtaccessInterface
     /**
      * Returns a representation of the htaccess, ready for inclusion in a file
      *
-     * @api
-     * @param int $indentation [optional] Defaults to null
-     * @param bool $ignoreWhiteLines [optional] Defaults to null
+     * @param int|null $indentation [optional] Defaults to null
+     * @param bool|null $ignoreWhiteLines [optional] Defaults to null
      * @param bool $ignoreComments [optional] Defaults to null
      * @return string
+     *@api
      */
-    public function txtSerialize($indentation = null, $ignoreWhiteLines = null, $ignoreComments = false)
+    public function txtSerialize(int $indentation = null, bool $ignoreWhiteLines = null, bool $ignoreComments = false): string
     {
-        /** @var \Tivie\HtaccessParser\Token\TokenInterface[] $array */
+        /** @var TokenInterface[] $array */
         $array = $this->getArrayCopy();
         $otp = '';
 
@@ -236,7 +238,7 @@ class HtaccessContainer extends BaseArrayObject implements HtaccessInterface
         $ignoreComments = (is_null($ignoreComments)) ? $this->ignoreCommentss : $ignoreComments;
 
 
-        foreach ($array as $num => $token) {
+        foreach ($array as $_num => $token) {
             $otp .= $this->txtSerializeToken($token, 0, !!$ignoreWhiteLines, !!$ignoreComments);
         }
 
@@ -254,41 +256,35 @@ class HtaccessContainer extends BaseArrayObject implements HtaccessInterface
      * @api
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->txtSerialize();
     }
 
-    private function txtSerializeToken(TokenInterface $token, $indentation, $ignoreWhiteLines, $ignoreComments)
+    private function txtSerializeToken(TokenInterface $token, int $indentation, bool $ignoreWhiteLines, bool $ignoreComments): string
     {
-        $ind = '';
-        for ($i = 0; $i < $indentation; ++$i) {
-            $ind .= ' ';
-        }
+        $ind = str_repeat(' ', $indentation);
 
         if ($token instanceof Block) {
             return $this->blockToString($token, $indentation, $ignoreWhiteLines, $ignoreComments);
 
         } else if ($token instanceof WhiteLine) {
-            return (!!$ignoreWhiteLines) ? '' : PHP_EOL;
+            return ($ignoreWhiteLines) ? '' : PHP_EOL;
 
         } else if ($token instanceof Comment) {
-            return (!!$ignoreComments) ? '' : $ind . (string)$token . PHP_EOL;
+            return ($ignoreComments) ? '' : $ind . $token . PHP_EOL;
 
         } else {
-            return $ind . (string)$token . PHP_EOL;
+            return $ind . $token . PHP_EOL;
         }
     }
 
-    private function blockToString(Block $block, $indentation, $ignoreWhiteLines, $ignoreComments)
+    private function blockToString(Block $block, int $indentation, bool $ignoreWhiteLines, bool $ignoreComments): string
     {
         $otp = '';
-        $ind = '';
 
         // Calculate indentation
-        for ($i = 0; $i < $indentation; ++$i) {
-            $ind .= ' ';
-        }
+        $ind = str_repeat(' ', $indentation);
 
         //Opening Tag
         $otp .= $ind . '<' . $block->getName();
@@ -305,7 +301,7 @@ class HtaccessContainer extends BaseArrayObject implements HtaccessInterface
         }
 
         //Closing tag
-        $otp .= $ind . "</" . $block->getName() . ">" . PHP_EOL;
+        $otp .= $ind . "</{$block->getName()}>" . PHP_EOL;
         return $otp;
     }
 
@@ -315,7 +311,7 @@ class HtaccessContainer extends BaseArrayObject implements HtaccessInterface
      * @param int $offset [required] If offset is non-negative, the sequence will start at that offset.
      *                                      If offset is negative, the sequence will start that far from the end of the
      *                                      array.
-     * @param int $length [optional] If length is given and is positive, then the sequence will have up to that
+     * @param int|null $length [optional] If length is given and is positive, then the sequence will have up to that
      *                                      many elements in it. If the array is shorter than the length, then only the
      *                                      available array elements will be present. If length is given and is negative
      *                                      then the sequence will stop that many elements from the end of the array.
@@ -325,22 +321,13 @@ class HtaccessContainer extends BaseArrayObject implements HtaccessInterface
      *                                      default. You can change this behaviour by setting preserveKeys to TRUE.
      * @param bool $asArray [optional] By default, slice() returns a new instance of HtaccessContainer object.
      *                                      If you prefer a basic array instead, set asArray to true
-     * @return array                        Returns the slice.
-     * @throws InvalidArgumentException
+     * @return array|HtaccessContainer      Returns the slice.
      */
-    public function slice($offset, $length = null, $preserveKeys = false, $asArray = false)
+    public function slice(int $offset, int|null $length = null, bool $preserveKeys = false, bool $asArray = false): HtaccessContainer|array
     {
-        if (!is_int($offset)) {
-            throw new InvalidArgumentException('integer', 0);
-        }
-        if (!is_null($length) && !is_int($length)) {
-            throw new InvalidArgumentException('integer', 1);
-        }
-        $preserveKeys = !!$preserveKeys;
-
         $array = $this->getArrayCopy();
         $newArray = array_slice($array, $offset, $length, $preserveKeys);
-        return (!!$asArray) ? $newArray : new self($newArray);
+        return ($asArray) ? $newArray : new self($newArray);
     }
 
     /**
@@ -350,13 +337,9 @@ class HtaccessContainer extends BaseArrayObject implements HtaccessInterface
      * @param TokenInterface $token [required] The token to insert
      *
      * @return $this
-     * @throws InvalidArgumentException
      */
-    public function insertAt($offset, TokenInterface $token)
+    public function insertAt(int $offset, TokenInterface $token): static
     {
-        if (!is_int($offset)) {
-            throw new InvalidArgumentException('integer', 0);
-        }
         $this->splice($offset, 0, array($token));
 
         return $this;
@@ -369,30 +352,19 @@ class HtaccessContainer extends BaseArrayObject implements HtaccessInterface
      * @param int $offset [required] If offset is positive then the start of removed portion is at that offset
      *                               from the beginning. If offset is negative then it starts that far from the
      *                               end of the input array.
-     * @param int $length [optional] If length is omitted, removes everything from offset to the end. If length
+     * @param int|null $length [optional] If length is omitted, removes everything from offset to the end. If length
      *                               is specified and is positive, then that many elements will be removed.
      *                               If length is specified and is negative then the end of the removed portion
      *                               will be that many elements from the end.
      *                               Tip: to remove everything from offset to the end of the array when
      *                               replacement is also specified, use count($input) for length.
-     * @param array|\ArrayAccess $replacement [optional] If replacement array is specified, then the removed elements
+     * @param ArrayAccess|array $replacement [optional] If replacement array is specified, then the removed elements
      *                               are replaced with elements from this array.
      *
      * @return array                 Returns the array consisting of the extracted elements.
-     * @throws InvalidArgumentException
      */
-    public function splice($offset, $length = null, $replacement = array())
+    public function splice(int $offset, int $length = null, ArrayAccess|array $replacement = array()): array
     {
-        if (!is_int($offset)) {
-            throw new InvalidArgumentException('integer', 0);
-        }
-        if (!is_null($length) && !is_int($length)) {
-            throw new InvalidArgumentException('integer', 1);
-        }
-        if (!is_array($replacement) && !$replacement instanceof \ArrayAccess) {
-            throw new InvalidArgumentException('integer', 2);
-        }
-
         $array = $this->getArrayCopy();
         $spliced = array_splice($array, $offset, $length, $replacement);
         $this->exchangeArray($array);
@@ -402,15 +374,16 @@ class HtaccessContainer extends BaseArrayObject implements HtaccessInterface
     /**
      * @inheritDocs
      * @override ArrayObject::offsetSet
-     * @param int $offset
+     * @param mixed $offset
      * @param TokenInterface $value
      * @throws InvalidArgumentException
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet(mixed $offset, mixed $value): void
     {
         if (!is_null($offset) && !is_int($offset)) {
-            throw new InvalidArgumentException('integer', 0);
+            throw new InvalidArgumentException('scalar', 0);
         }
+
         if (!$value instanceof TokenInterface) {
             throw new InvalidArgumentException('TokenInterface', 1);
         }

@@ -3,7 +3,7 @@
  * -- PHP Htaccess Parser --
  * Exception.php created at 02-12-2014
  *
- * Copyright 2014 Estevão Soares dos Santos
+ * Copyright 2014-2024 Estevão Soares dos Santos
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ namespace Tivie\HtaccessParser\Exception;
  * Note: This exception and all its children change the line and file in the backtrace log. If you
  *
  * @package Tivie\HtaccessParser\Exception
- * @copyright 2014 Estevão Soares dos Santos
+ * @copyright 2014-2024 Estêvão Soares dos Santos
  */
 class Exception extends \Exception
 {
@@ -51,7 +51,7 @@ class Exception extends \Exception
         parent::__construct($message, $code, $exception);
     }
 
-    private function changeLineAndFile()
+    private function changeLineAndFile(): void
     {
         $trace = $this->getTrace();
         if (!isset($trace[0])) {
@@ -72,7 +72,7 @@ class Exception extends \Exception
      *
      * @param bool $debugLibrary
      */
-    public static function debugLibrary($debugLibrary)
+    public static function debugLibrary($debugLibrary): void
     {
         self::$debugLibrary = !!$debugLibrary;
     }

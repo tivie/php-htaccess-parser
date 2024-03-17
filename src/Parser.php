@@ -3,7 +3,7 @@
  * -- PHP Htaccess Parser --
  * Parser.php created at 02-12-2014
  *
- * Copyright 2014 Estevão Soares dos Santos
+ * Copyright 2014-2024 Estevão Soares dos Santos
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,9 +24,13 @@ const IGNORE_WHITELINES = 2;
 const IGNORE_COMMENTS = 4;
 const AS_ARRAY = 8;
 
+use ArrayAccess;
+use SplFileObject;
 use Tivie\HtaccessParser\Exception\Exception;
+use Tivie\HtaccessParser\Exception\DomainException;
 use Tivie\HtaccessParser\Exception\InvalidArgumentException;
 use Tivie\HtaccessParser\Exception\SyntaxException;
+use Tivie\HtaccessParser\Token\BaseToken;
 use Tivie\HtaccessParser\Token\Block;
 use Tivie\HtaccessParser\Token\Comment;
 use Tivie\HtaccessParser\Token\Directive;
@@ -37,51 +41,53 @@ use Tivie\HtaccessParser\Token\WhiteLine;
  * Htaccess Parser implemented in PHP
  *
  * @package Tivie\HtaccessParser
- * @copyright 2014 Estevão Soares dos Santos
+ * @copyright 2014-2024 Estêvão Soares dos Santos
  */
 class Parser
 {
     /**
-     * @var \SplFileObject
+     * @var SplFileObject
      */
-    protected $file;
+    protected SplFileObject $file;
 
     /**
-     * @var array|\ArrayAccess
+     * @var array|ArrayAccess|null
      */
-    protected $container;
+    protected array|ArrayAccess|null $container = null;
 
     /**
      * @var int Defaults to IGNORE_WHITELINES
      */
-    protected $mode = 2;
+    protected int $mode = 2;
 
-    private $_cpMode = 2;
+    private int $_cpMode = 2;
 
     /**
      * @var bool
      */
-    protected $rewind = true;
+    protected bool $rewind = true;
 
     /**
      * Create a new Htaccess Parser object
      *
-     * @param \SplFileObject $htaccessFile [optional] The .htaccess file to read.
+     * @param SplFileObject|null $htaccessFile [optional] The .htaccess file to read.
      *                                                Must be set before running the parse method
      */
-    public function __construct(\SplFileObject $htaccessFile = null)
+    public function __construct(SplFileObject|null $htaccessFile = null)
     {
-        $this->file = $htaccessFile;
+        if ($htaccessFile) {
+            $this->file = $htaccessFile;
+        }
     }
 
     /**
      * Set the .htaccess file to parse
      *
      * @api
-     * @param \SplFileObject $file
+     * @param SplFileObject $file
      * @return $this
      */
-    public function setFile(\SplFileObject $file)
+    public function setFile(SplFileObject $file): static
     {
         $this->file = $file;
 
@@ -92,18 +98,12 @@ class Parser
      * Set the receiving container of the parsed htaccess
      *
      * @api
-     * @param mixed $container Can be an array, an ArrayObject or an object that implements ArrayAccess
+     * @param ArrayAccess|array $container Can be an array, an ArrayObject or an object that implements ArrayAccess
      * @return $this
-     * @throws InvalidArgumentException
      */
-    public function setContainer($container)
+    public function setContainer(ArrayAccess|array $container): static
     {
-        if (!is_array($container) && !$container instanceof \ArrayAccess) {
-            throw new InvalidArgumentException('array or ArrayAccess Object', 0);
-        }
-
         $this->container = $container;
-
         return $this;
     }
 
@@ -116,7 +116,7 @@ class Parser
      * @param boolean $bool
      * @return $this
      */
-    public function useArrays($bool = true)
+    public function useArrays(bool $bool = true): static
     {
         return $this->bitwiseCtrl(!!$bool, AS_ARRAY);
     }
@@ -128,7 +128,7 @@ class Parser
      * @param boolean $bool
      * @return $this
      */
-    public function ignoreWhitelines($bool = true)
+    public function ignoreWhitelines(bool $bool = true): static
     {
         return $this->bitwiseCtrl(!!$bool, IGNORE_WHITELINES);
     }
@@ -140,7 +140,7 @@ class Parser
      * @param boolean $bool
      * @return $this
      */
-    public function ignoreComments($bool = true)
+    public function ignoreComments(bool $bool = true): static
     {
         return $this->bitwiseCtrl(!!$bool, IGNORE_COMMENTS);
     }
@@ -152,7 +152,7 @@ class Parser
      * @param bool $bool
      * @return $this
      */
-    public function rewindFile($bool = true)
+    public function rewindFile(bool $bool = true): static
     {
         $this->rewind = !!$bool;
         return $this;
@@ -164,7 +164,7 @@ class Parser
      * @param int $mode
      * @return $this
      */
-    public function setMode($mode)
+    public function setMode(int $mode): static
     {
         $this->mode = $mode;
 
@@ -174,25 +174,27 @@ class Parser
     /**
      * Parse a .htaccess file
      *
-     * @api
-     * @param \SplFileObject $file [optional] The .htaccess file. If null is passed and the file wasn't previously
+     * @param SplFileObject|null $file [optional] The .htaccess file. If null is passed and the file wasn't previously
      *                                             set, it will raise an exception
-     * @param int $optFlags [optional] Option flags
+     * @param int|null $optFlags [optional] Option flags
      *                                              - IGNORE_WHITELINES  [2] Ignores whitelines (default)
      *                                              - IGNORE_COMMENTS    [4] Ignores comments
-     * @param bool $rewind [optional] If the file pointer should be moved to the start (default is true)
-     * @return array|\ArrayAccess|HtaccessContainer
+     *                                              - As_ARRAY           [8] Returns an array
+     * @param bool|null $rewind [optional] If the file pointer should be moved to the start (default is true)
+     * @return array|ArrayAccess|HtaccessContainer
      * @throws Exception
+     * @throws SyntaxException
+     * @api
      */
-    public function parse(\SplFileObject $file = null, $optFlags = null, $rewind = null)
+    public function parse(SplFileObject $file = null, int|null $optFlags = null, bool|null $rewind = null): HtaccessContainer|ArrayAccess|array
     {
         //Prepare passed options
         $file = ($file !== null) ? $file : $this->file;
         $optFlags = ($optFlags !== null) ? $optFlags : $this->mode;
         $rewind = ($rewind !== null) ? !!$rewind : $this->rewind;
 
-        if (!$file instanceof \SplFileObject) {
-            throw new Exception(".htaccess file is not set. You must set it (with Prser::setFile) before calling parse");
+        if (!$file instanceof SplFileObject) {
+            throw new Exception(".htaccess file is not set. You must set it (with Parser::setFile) before calling parse");
         }
 
         if (!$file->isReadable()) {
@@ -215,7 +217,7 @@ class Parser
         if ($asArray) {
             $htaccess = array();
         } else {
-            $htaccess = ($this->container != null) ? $this->container : new HtaccessContainer();
+            $htaccess = ($this->container !== null) ? $this->container : new HtaccessContainer();
         }
 
         //Dump file line by line into $htaccess
@@ -235,7 +237,15 @@ class Parser
         return $htaccess;
     }
 
-    private function parseLine($line, \SplFileObject $file)
+    /**
+     * @param string $line
+     * @param SplFileObject $file
+     * @return BaseToken|null
+     * @throws DomainException
+     * @throws InvalidArgumentException
+     * @throws SyntaxException
+     */
+    private function parseLine(string $line, SplFileObject $file): BaseToken|null
     {
         $ignoreWhiteLines = (IGNORE_WHITELINES & $this->_cpMode);
         $ignoreComments = (IGNORE_COMMENTS & $this->_cpMode);
@@ -275,7 +285,7 @@ class Parser
      * @param string $line
      * @return bool
      */
-    protected function isWhiteLine($line)
+    protected function isWhiteLine(string $line): bool
     {
         $line = trim($line);
         return ($line == null);
@@ -287,7 +297,7 @@ class Parser
      * @param string $line
      * @return bool
      */
-    protected function isMultiLine($line)
+    protected function isMultiLine(string $line): bool
     {
         $line = trim($line);
         return (preg_match('/\\\\$/', $line) > 0);
@@ -299,7 +309,7 @@ class Parser
      * @param string $line
      * @return bool
      */
-    protected function isComment($line)
+    protected function isComment(string $line): bool
     {
         $line = trim($line);
         return (preg_match('/^#/', $line) > 0);
@@ -311,10 +321,10 @@ class Parser
      * @param string $line
      * @return bool
      */
-    protected function isDirective($line)
+    protected function isDirective(string $line): bool
     {
         $line = trim($line);
-        $pattern = '/^[^#\<]/';
+        $pattern = '/^[^#<]/';
         return (preg_match($pattern, $line) > 0);
     }
 
@@ -324,20 +334,20 @@ class Parser
      * @param string $line
      * @return bool
      */
-    protected function isBlock($line)
+    protected function isBlock(string $line): bool
     {
         $line = trim($line);
-        return (preg_match('/^\<[^\/].*\>$/', $line) > 0);
+        return (preg_match('/^<[^\/].*>$/', $line) > 0);
     }
 
     /**
      * Check if line is a Block end
      *
      * @param string $line
-     * @param string $blockName [optional] The block's name
+     * @param string|null $blockName [optional] The block's name
      * @return bool
      */
-    protected function isBlockEnd($line, $blockName = null)
+    protected function isBlockEnd(string $line, string $blockName = null): bool
     {
         $line = trim($line);
         $pattern = '/^\<\/';
@@ -349,12 +359,12 @@ class Parser
     /**
      * Parse a Multi Line
      *
-     * @param $line
-     * @param \SplFileObject $file
-     * @param $lineBreaks
+     * @param string $line
+     * @param SplFileObject $file
+     * @param array $lineBreaks
      * @return string
      */
-    protected function parseMultiLine($line, \SplFileObject $file, &$lineBreaks)
+    protected function parseMultiLine(string $line, SplFileObject $file, array &$lineBreaks): string
     {
         while ($this->isMultiLine($line) && $file->valid()) {
             $lineBreaks[] = strlen($line);
@@ -375,7 +385,7 @@ class Parser
      *
      * @return WhiteLine
      */
-    protected function parseWhiteLine()
+    protected function parseWhiteLine(): WhiteLine
     {
         return new WhiteLine();
     }
@@ -386,8 +396,9 @@ class Parser
      * @param string $line
      * @param array $lineBreaks
      * @return Comment
+     * @throws DomainException
      */
-    protected function parseCommentLine($line, $lineBreaks)
+    protected function parseCommentLine(string $line, array $lineBreaks): Comment
     {
         $comment = new Comment();
         $comment->setText($line)
@@ -400,11 +411,14 @@ class Parser
      * Parse a Directive Line
      *
      * @param string $line
-     * @param \SplFileObject $file
+     * @param SplFileObject $file
+     * @param array $lineBreaks
      * @return Directive
+     * @throws DomainException
+     * @throws InvalidArgumentException
      * @throws SyntaxException
      */
-    protected function parseDirectiveLine($line, \SplFileObject $file, $lineBreaks)
+    protected function parseDirectiveLine(string $line, SplFileObject $file, array $lineBreaks): Directive
     {
         $directive = new Directive();
 
@@ -427,11 +441,13 @@ class Parser
      * Parse a Block Line
      *
      * @param string $line
-     * @param \SplFileObject $file
+     * @param SplFileObject $file
+     * @param array $lineBreaks
      * @return Block
+     * @throws DomainException
      * @throws SyntaxException
      */
-    protected function parseBlockLine($line, \SplFileObject $file, $lineBreaks)
+    protected function parseBlockLine(string $line, SplFileObject $file, array $lineBreaks): Block
     {
         $block = new Block();
 
@@ -461,7 +477,7 @@ class Parser
         return $block;
     }
 
-    private function bitwiseCtrl($bool, $flag)
+    private function bitwiseCtrl($bool, $flag): static
     {
         if ($bool) {
             $this->mode = $this->mode | $flag;
@@ -472,9 +488,9 @@ class Parser
         return $this;
     }
 
-    private function directiveRegex($str)
+    private function directiveRegex($str): array
     {
-        $pattern = '/"(?:\\.|[^\\"])*"|\S+/';
+        $pattern = '/"(?:\\.|[^\"])*"|\S+/';
         $matches = array();
         $trimmedMatches = array();
         if (preg_match_all($pattern, $str, $matches) && isset($matches[0])) {
@@ -489,7 +505,7 @@ class Parser
         return array();
     }
 
-    private function blockRegex($line)
+    private function blockRegex($line): array
     {
         $pattern = '/(?:[\s|<]")([^<>"]+)(?:"[\s|>])|([^<>\s]+)/';
         $final = array();

@@ -3,7 +3,7 @@
  * -- PHP Htaccess Parser --
  * TokenInterface.php created at 02-12-2014
  *
- * Copyright 2014 Estevão Soares dos Santos
+ * Copyright 2014-2024 Estevão Soares dos Santos
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ use JsonSerializable;
  * An Interface for Tokens to implement
  *
  * @package Tivie\HtaccessParser\Token
- * @copyright 2014 Estevão Soares dos Santos
+ * @copyright 2014-2024 Estêvão Soares dos Santos
  */
 interface TokenInterface extends JsonSerializable
 {
@@ -41,21 +41,21 @@ interface TokenInterface extends JsonSerializable
      *
      * @return int
      */
-    public function getTokenType();
+    public function getTokenType(): int;
 
     /**
      * Get the Token's name
      *
      * @return string
      */
-    public function getName();
+    public function getName(): string;
 
     /**
      * Get the Token's arguments
      *
      * @return array
      */
-    public function getArguments();
+    public function getArguments(): array;
 
     /**
      * Set the Token's arguments
@@ -63,7 +63,7 @@ interface TokenInterface extends JsonSerializable
      * @param array $arguments
      * @return $this
      */
-    public function setArguments(array $arguments);
+    public function setArguments(array $arguments): static;
 
     /**
      * A helper method that returns a string corresponding to the Token's value
@@ -71,21 +71,21 @@ interface TokenInterface extends JsonSerializable
      *
      * @return string
      */
-    public function getValue();
+    public function getValue(): string;
 
     /**
      * Check if this Token spawns across multiple lines
      *
      * @return bool
      */
-    public function isMultiLine();
+    public function isMultiLine(): bool;
 
     /**
      * Get the line breaks
      *
      * @return int[]
      */
-    public function getLineBreaks();
+    public function getLineBreaks(): array;
 
     /**
      * Set the line breaks
@@ -93,25 +93,25 @@ interface TokenInterface extends JsonSerializable
      * @param int[] $lineBreaks Array of integers
      * @return $this
      */
-    public function setLineBreaks(array $lineBreaks);
+    public function setLineBreaks(array $lineBreaks): static;
 
     /**
-     * @param integer $lineBreak
+     * @param int $lineBreak
      * @return $this
      */
-    public function addLineBreak($lineBreak);
+    public function addLineBreak(int $lineBreak): static;
 
     /**
      * Get a string representation of the Token
      *
      * @return string
      */
-    public function __toString();
+    public function __toString(): string;
 
     /**
      * Get the array representation of the Token
      *
      * @return array
      */
-    public function toArray();
+    public function toArray(): array;
 }
