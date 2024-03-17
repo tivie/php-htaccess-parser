@@ -17,7 +17,7 @@ The parser supports:
  - Comments
 
 ## Installation
-You can install it by cloning the git repository, ~~downloading the phar archive~~ (coming soon) or using composer.
+You can install it by cloning the git repository or using composer.
 
 ### Git clone
 
