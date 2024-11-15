@@ -186,7 +186,7 @@ class Parser
      * @throws SyntaxException
      * @api
      */
-    public function parse(SplFileObject $file = null, int|null $optFlags = null, bool|null $rewind = null): HtaccessContainer|ArrayAccess|array
+    public function parse(?SplFileObject $file = null, int|null $optFlags = null, bool|null $rewind = null): HtaccessContainer|ArrayAccess|array
     {
         //Prepare passed options
         $file = ($file !== null) ? $file : $this->file;
@@ -347,7 +347,7 @@ class Parser
      * @param string|null $blockName [optional] The block's name
      * @return bool
      */
-    protected function isBlockEnd(string $line, string $blockName = null): bool
+    protected function isBlockEnd(string $line, ?string $blockName = null): bool
     {
         $line = trim($line);
         $pattern = '/^\<\/';

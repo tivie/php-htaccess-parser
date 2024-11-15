@@ -70,7 +70,7 @@ class Block extends BaseToken implements IteratorAggregate, ArrayAccess, Countab
      * @param string $blockName [optional] The name of the block
      * @param string|null $argument [optional] The argument of the block
      */
-    public function __construct(string $blockName = 'blockName', string $argument = null)
+    public function __construct(string $blockName = 'blockName', ?string $argument = null)
     {
         $this->setName($blockName);
 
