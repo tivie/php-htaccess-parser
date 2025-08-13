@@ -120,7 +120,7 @@ class HtaccessContainer extends BaseArrayObject implements HtaccessInterface
      * @param bool $deepSearch [optional] If the search should be multidimensional. Default is true
      * @return null|TokenInterface Returns the Token or null if none is found
      */
-    public function search(string $name, int $type = null, bool $deepSearch = true): ?TokenInterface
+    public function search(string $name, ?int $type = null, bool $deepSearch = true): ?TokenInterface
     {
         /** @var TokenInterface[] $array */
         $array = $this->getArrayCopy();
@@ -171,13 +171,13 @@ class HtaccessContainer extends BaseArrayObject implements HtaccessInterface
     }
 
     /**
-     * Search this object for a Token with specific name and return the index(key) of the first match
+     * Search this object for a Token with a specific name and return the index(key) of the first match
      *
      * @param string $name [required] Name of the token
      * @param int|null $type [optional] TOKEN_DIRECTIVE | TOKEN_BLOCK
      * @return int|null Returns the index or null if Token is not found
      */
-    public function getIndex(string $name, int $type = null): ?int
+    public function getIndex(string $name, ?int $type = null): ?int
     {
         /** @var TokenInterface[] $array */
         $array = $this->getArrayCopy();
@@ -227,7 +227,7 @@ class HtaccessContainer extends BaseArrayObject implements HtaccessInterface
      * @return string
      *@api
      */
-    public function txtSerialize(int $indentation = null, bool $ignoreWhiteLines = null, bool $ignoreComments = false): string
+    public function txtSerialize(?int $indentation = null, ?bool $ignoreWhiteLines = null, bool $ignoreComments = false): string
     {
         /** @var TokenInterface[] $array */
         $array = $this->getArrayCopy();
@@ -363,7 +363,7 @@ class HtaccessContainer extends BaseArrayObject implements HtaccessInterface
      *
      * @return array                 Returns the array consisting of the extracted elements.
      */
-    public function splice(int $offset, int $length = null, ArrayAccess|array $replacement = array()): array
+    public function splice(int $offset, ?int $length = null, ArrayAccess|array $replacement = array()): array
     {
         $array = $this->getArrayCopy();
         $spliced = array_splice($array, $offset, $length, $replacement);
